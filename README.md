@@ -1,4 +1,4 @@
 fb-chess
 ========
 
-Chess offline
+Play chess online! online chess battleground

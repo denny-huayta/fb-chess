@@ -56,22 +56,27 @@ class CHESSMASTER < Sinatra::Application
 	get '/games' do
 		if session['access_token']
 			erb :games
-		end
-  		redirect '/login'
+		else
+  			redirect '/login'
+  		end
 	end
 
 	get '/chessboard' do
 		if session['access_token']
 			erb :chessboard
+		else
+			redirect '/login'
 		end
-  		redirect '/login'
+  		
 	end
 
 	get '/about' do
 		if session['access_token']
 			erb :about
+		else
+			redirect '/login'
 		end
-  		redirect '/login'
+  		
 	end
 end
 

@@ -1,8 +1,20 @@
 
 <div class="hero-unit">
-  <h1>FB-Chessmaster</h1>
-  <p>Play chess online! online chess battleground</p>
-  <p>
-    <a class="btn btn-primary btn-large">Sign up with Facebook</a>
-  </p>
+	<h1>FB-Chessmaster</h1>
+	<p>Play chess online! online chess battleground</p>  
+	<% if session[:access_token] %>
+		<p>
+		  	<% @api = Koala::Facebook::API.new(session[:access_token]) %>	  
+		  	<% @user_info = @api.get_object("me") %>
+		  	Welcome <%= @user_info['name'] %>.
+		</p>
+		<p>
+			<a class="btn btn-primary btn-large" href="/logout" >Log out</a>
+		</p>	
+	<% else %>
+		<p>
+			<a class="btn btn-primary btn-large" href="/login" >Sign up with Facebook</a>
+		</p>
+	<% end %>    
+
 </div>

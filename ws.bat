@@ -1,1 +1,1 @@
-ruby -rubygems web.rb
+ruby -rubygems application.rb

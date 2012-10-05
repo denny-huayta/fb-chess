@@ -35,7 +35,7 @@ class CHESSMASTER < Sinatra::Application
 
 	get '/login' do
 		# generate a new oauth object with your app data and your callback url
-		session['oauth'] = Facebook::OAuth.new(APP_ID, APP_CODE, SITE_URL + 'callback')
+		session['oauth'] = Facebook::OAuth.new(APP_ID, APP_CODE, SITE_URL + 'callback').url_for_oauth_code(:permissions => "publish_stream")
 		# redirect to facebook to get your code
 		redirect session['oauth'].url_for_oauth_code()
 	end

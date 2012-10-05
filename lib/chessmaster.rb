@@ -23,7 +23,7 @@ class CHESSMASTER < Sinatra::Application
 			# for example:
 			@graph = Koala::Facebook::GraphAPI.new(session["access_token"])
 			# publish to your wall (if you have the permissions)
-			@graph.put_wall_post("Sign up from Chessmaster!" + current() )
+			@graph.put_wall_post("Sign up from Chessmaster!" + Time.now.to_s )
 			# or publish to someone else (if you have the permissions too ;) )
 			# @graph.put_wall_post("Checkout my new cool app!", {}, "someoneelse's id")
 			erb :index

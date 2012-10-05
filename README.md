@@ -8,6 +8,7 @@ Play chess online! online chess battleground
 * Facebook API (http://developers.facebook.com/)
 * Koala (https://github.com/arsduo/koala)
 * Sinatra (http://www.sinatrarb.com/)
+* Cucumber-Sinatra (https://github.com/bernd/cucumber-sinatra)
 
 ## Stories
 * Sign up with facebook

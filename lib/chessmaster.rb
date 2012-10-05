@@ -18,19 +18,19 @@ class CHESSMASTER < Sinatra::Application
 	enable :sessions
 
 	get '/' do
-		if session['access_token']
+		#if session['access_token']
 		 	#'You are logged in! <a href="/logout">Logout</a>'
 			# do some stuff with facebook here
 			# for example:
-			@graph = Koala::Facebook::GraphAPI.new(session["access_token"])
+			# @graph = Koala::Facebook::GraphAPI.new(session["access_token"])
 			# publish to your wall (if you have the permissions)
-			@graph.put_wall_post("Sign up from Chessmaster!")
+			# @graph.put_wall_post("Sign up from Chessmaster!")
 			# or publish to someone else (if you have the permissions too ;) )
 			# @graph.put_wall_post("Checkout my new cool app!", {}, "someoneelse's id")
+			# erb :index
+		#else
 			erb :index
-		else
-			erb :index
-		end		
+		#end		
 	end
 
 	get '/login' do
@@ -38,7 +38,8 @@ class CHESSMASTER < Sinatra::Application
 		session['oauth'] = Facebook::OAuth.new(APP_ID, APP_CODE, SITE_URL + 'callback')
 		#.url_for_oauth_code(:permissions => "publish_stream")
 		# redirect to facebook to get your code
-		redirect session['oauth'].url_for_oauth_code(:permissions => "publish_stream")
+		#redirect session['oauth'].url_for_oauth_code(:permissions => "publish_stream")
+		redirect session['oauth'].url_for_oauth_code()
 	end
 
 	get '/logout' do
@@ -63,11 +64,11 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/chessboard' do
-		if session['access_token']
+		#if session['access_token']
 			erb :chessboard
-		else
-			redirect '/login'
-		end
+		#else
+			#redirect '/login'
+		#end
   		
 	end
 

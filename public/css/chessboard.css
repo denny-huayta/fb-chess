@@ -1,0 +1,125 @@
+.BaseLine
+{
+    height: 88px;
+    width: 704px;
+    clear: both;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    overflow: hidden;
+    background-color: #c0c0c0;
+}
+
+.ColorB
+{
+    background-color: #c0c0c0;
+}
+
+.ColorW
+{
+    background-color: white;
+}
+
+.BaseLineBottom
+{
+    border-bottom: 1px solid black;
+}
+
+.BaseBox
+{
+    height: 88px;
+    width: 87px;
+    float: left;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-left: 1px solid black;
+}
+
+.BaseBox:hover
+{
+    background-color:#FEFFCE;
+    cursor: pointer;
+}
+
+
+/* Black ---------------------------- */
+.BlackTower
+{
+    background-image: url(../Players/black_rook.png);
+}
+
+.BlackHorse
+{
+    background-image: url(../Players/black_knight.png);
+}
+
+.BlackBishop
+{
+    background-image: url(../Players/black_bishop.png);
+}
+
+.BlackQueen
+{
+    background-image: url(../Players/black_queen.png);
+}
+
+.BlackKing
+{
+    background-image: url(../Players/black_king.png);
+}
+
+.BlackPawn
+{
+    background-image: url(../Players/black_pawn.png);
+}
+
+/* White ---------------------------- */
+.WhiteTower
+{
+    background-image: url(../Players/white_rook.png);
+}
+
+.WhiteHorse
+{
+    background-image: url(../Players/white_knight.png);
+}
+
+.WhiteBishop
+{
+    background-image: url(../Players/white_bishop.png);
+}
+
+.WhiteQueen
+{
+    background-image: url(../Players/white_queen.png);
+}
+
+.WhiteKing
+{
+    background-image: url(../Players/white_king.png);
+}
+
+.WhitePawn
+{
+    background-image: url(../Players/white_pawn.png);
+}
+
+/* Hacks --------------*/
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+
+/*-------- debug --------- */
+.DebugBox
+{
+    width:708px;
+    text-align:center;
+}
+
+.DebugInfo
+{
+    width:70%;
+}

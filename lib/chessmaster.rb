@@ -3,6 +3,11 @@ APP_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 require 'rubygems'
 require 'sinatra'
 require 'koala'
+require 'mongo'
+require 'mongoid'
+require 'json'
+require 'mongo_mapper'
+
 
 # register your app at facebook to get those infos
 APP_ID = 386008508137576 # your app id
@@ -54,29 +59,56 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/games' do
-		if session['access_token']
+				
+		#@games.insert(game)
+
+		session['games'] = @games
+		#if session['access_token']		
 			erb :games
-		else
-  			redirect '/login'
-  		end
+		#else
+  			#redirect '/login'
+  		#end
 	end
 
 	get '/chessboard' do
-		if session['access_token']
+		#if session['access_token']
 			erb :chessboard
-		else
-			redirect '/login'
-		end
+		#else
+			#redirect '/login'
+		#end
   		
 	end
 
 	get '/about' do
-		if session['access_token']
+		#if session['access_token']
 			erb :about
-		else
-			redirect '/login'
-		end
+		#else
+			#redirect '/login'
+		#end
   		
 	end
+
+	get '/newGame' do
+		connection = Mongo::Connection.new("localhost")
+		db = connection.db("mydb")
+		db = Mongo::Connection.new.db("mydb")
+
+		$games = db.collection('games')
+
+		game = {
+			:gameId	 => '1',
+			:player1 => 'Denny Huayta',
+			:player2 => 'Jose Perez',
+			:urlGame => 'http://fb.chess.herokuapp.com',
+			:status  =>	'New'
+		}
+		
+		$games.insert(game)
+
+		session['games'] = $games
+
+		erb :games
+	end
+
 end
 

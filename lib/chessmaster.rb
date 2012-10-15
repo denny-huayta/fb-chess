@@ -13,7 +13,8 @@ require_relative 'game'
 # register your app at facebook to get those infos
 APP_ID = 386008508137576 # your app id
 APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
-SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
+#SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
+SITE_URL = 'http://localhost:9292/'
 
 class CHESSMASTER < Sinatra::Application
 	
@@ -28,15 +29,31 @@ class CHESSMASTER < Sinatra::Application
 	#MongoMapper.database.authenticate('','')
 
 	get '/' do
+
+		# TO BE DELETED
+		#session['userId']	= '123456789'
+		#session['name']		= 'Denny Huayta'
+		#session['username']	= 'dhuayta'
+		#session['email']	= 'denny_ha@hotmail.com'
+
+
 		if session['access_token']
 		 	#'You are logged in! <a href="/logout">Logout</a>'
 			# do some stuff with facebook here
 			# for example:
-			@graph = Koala::Facebook::GraphAPI.new(session["access_token"])
+			#@graph = Koala::Facebook::GraphAPI.new(session["access_token"])
 			# publish to your wall (if you have the permissions)
-			@graph.put_wall_post("Sign up from Chessmaster!" + Time.now.to_s )
+			#@graph.put_wall_post("Sign up from Chessmaster!" + Time.now.to_s )
 			# or publish to someone else (if you have the permissions too ;) )
 			# @graph.put_wall_post("Checkout my new cool app!", {}, "someoneelse's id")
+
+			@api = Koala::Facebook::API.new(session[:access_token])
+			@user_info = @api.get_object("me")
+			session['userId']	= @user_info['id']
+			session['name']		= @user_info['name']
+			session['username']	= @user_info['username']
+			session['email']	= @user_info['email']
+
 			erb :index
 		else
 			erb :index
@@ -75,6 +92,17 @@ class CHESSMASTER < Sinatra::Application
   		#end
 	end
 
+	get '/mygames' do
+		@player1Id = session['userId']
+		@games = Game.where(:player1Id => @player1Id).order(:item)
+		#session['games'] = @games
+		#if session['access_token']		
+		erb :games
+		#else
+  			#redirect '/login'
+  		#end
+	end
+
 	get '/chessboard' do
 		#if session['access_token']
 		erb :chessboard
@@ -100,11 +128,15 @@ class CHESSMASTER < Sinatra::Application
 		uuid = UUID.new
 		game = Game.new
 
-		game.item	 = Game.count + 1
-		game.gameId	 = uuid.generate
-		game.player1 = 'Denny Huayta'
-		game.status	 = 'New'
-		game.url     = 'http://fb-chess.herokuapp.com'
+		game.item				= Game.count + 1
+		game.gameId	 			= uuid.generate
+		game.player1 			= session['name']
+		game.player1Id			= session['userId']
+		game.player1UserName	= session['username']
+		game.player1Email		= session['email']
+		game.creationDate		= Time.now.to_s
+		game.status				= 'New'
+		game.url     			= 'http://fb-chess.herokuapp.com/see?game=' +  game.gameId
 
 		if game.save
 			status 201
@@ -123,7 +155,8 @@ class CHESSMASTER < Sinatra::Application
 
 		game.update_attributes(
 			:player2 => 'Jose Perez',
-			:current => game.player1,
+			:currentPlayer => game.player1,
+			:currentPlayerId => game.player1Id,
 			:status => 'In Progress'
 			)
 

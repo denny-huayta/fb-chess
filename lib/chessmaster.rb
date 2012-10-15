@@ -126,8 +126,9 @@ class CHESSMASTER < Sinatra::Application
 		if session['access_token']	
 			@gameId = params[:game]
 			@game = Game.where(:gameId => @gameId).first
-		else
 			erb :chessboard
+		else
+			redirect '/login'
 		end
 
 	end

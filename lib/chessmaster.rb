@@ -14,8 +14,8 @@ require_relative 'chessboard'
 # register your app at facebook to get those infos
 APP_ID = 386008508137576 # your app id
 APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
-#SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
-SITE_URL = 'http://localhost:9292/'
+SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
+#SITE_URL = 'http://localhost:9292/'
 
 class CHESSMASTER < Sinatra::Application
 	
@@ -25,9 +25,16 @@ class CHESSMASTER < Sinatra::Application
 	enable :sessions
 
 	# Mongo Mapper Connection
-	MongoMapper.connection = Mongo::Connection.new('localhost',27017, :pool_size => 5, :timeout => 5)
-	MongoMapper.database = 'mydb'
+	#MongoMapper.connection = Mongo::Connection.new('localhost',27017, :pool_size => 5, :timeout => 5)
+	#MongoMapper.database = 'mydb'
 	#MongoMapper.database.authenticate('','')
+
+	db = URI.parse(ENV['MONGOHQ_URL'])
+ 	#db_name = db.path.gsub(/^\//, '')
+ 	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port) #.db(db_name)
+ 	MongoMapper.database	= 'ChessDB'
+ 	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
+ 	
 
 	get '/' do
 

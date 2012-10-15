@@ -44,8 +44,8 @@ class CHESSMASTER < Sinatra::Application
 	@db_connection.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
 	
 
-	MongoMapper.connection = @db_connection
-
+	MongoMapper.connection  = @db_connection
+	MongoMapper.database	= 'ChessDB'
 
 	get '/' do
 

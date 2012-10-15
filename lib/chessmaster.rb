@@ -7,7 +7,9 @@ require 'mongo'
 require 'mongoid'
 require 'json'
 require 'mongo_mapper'
+#require 'uuid'
 
+require_relative 'game'
 
 # register your app at facebook to get those infos
 APP_ID = 386008508137576 # your app id
@@ -20,6 +22,11 @@ class CHESSMASTER < Sinatra::Application
 
 	set :root, APP_ROOT
 	enable :sessions
+
+	# Mongo Mapper Connection
+	MongoMapper.connection = Mongo::Connection.new('localhost',27017, :pool_size => 5, :timeout => 5)
+	MongoMapper.database = 'mydb'
+	#MongoMapper.database.authenticate('','')
 
 	get '/' do
 		if session['access_token']
@@ -61,10 +68,11 @@ class CHESSMASTER < Sinatra::Application
 	get '/games' do
 				
 		#@games.insert(game)
-
-		session['games'] = @games
+	
+		@games = Game.all
+		#session['games'] = @games
 		#if session['access_token']		
-			erb :games
+		erb :games
 		#else
   			#redirect '/login'
   		#end
@@ -72,42 +80,54 @@ class CHESSMASTER < Sinatra::Application
 
 	get '/chessboard' do
 		#if session['access_token']
-			erb :chessboard
+		erb :chessboard
 		#else
 			#redirect '/login'
 		#end
   		
+	end
+
+	get '/chessboard/:game' do |game|
+			
+		@game = Game.where(:gameId => "#{game}").first
+
+		#return @game.player1
+
+		erb :chessboard
+
 	end
 
 	get '/about' do
-		#if session['access_token']
-			erb :about
-		#else
-			#redirect '/login'
-		#end
-  		
+		erb :about
 	end
 
-	get '/newGame' do
-		connection = Mongo::Connection.new("localhost")
-		db = connection.db("mydb")
-		db = Mongo::Connection.new.db("mydb")
+	get '/new' do
+		uuid = UUID.new
+		game = Game.new
 
-		$games = db.collection('games')
+		game.gameId	 = uuid.generate
+		game.player1 = 'Denny Huayta'
+		game.status	 = 'New'
+		game.url     = 'http://fb-chess.herokuapp.com'
 
-		game = {
-			:gameId	 => '1',
-			:player1 => 'Denny Huayta',
-			:player2 => 'Jose Perez',
-			:urlGame => 'http://fb.chess.herokuapp.com',
-			:status  =>	'New'
-		}
-		
-		$games.insert(game)
+		if game.save
+			status 201
+		else
+			status 401
+		end
 
-		session['games'] = $games
+		@games = Game.all
 
 		erb :games
+	end
+
+	get '/deleteall' do
+		Game.destroy_all
+
+		@games = Game.all
+
+		erb :games
+
 	end
 
 end

@@ -1,22 +1,25 @@
-require 'uuid' 
-require 'mongo'
+require 'rubygems'
 require 'sinatra'
+require 'koala'
+require 'mongo'
 require 'mongoid'
 require 'json'
-require "sinatra/reloader" if development?
+require 'mongo_mapper'
+require 'uuid'
 
-Mongoid.load!("mongoid.yml")
+class Game
+	include MongoMapper::Document
 
-class Price    
-	include Mongoid::Document        
+	key :gameId,		String
+	key :player1,		String
+	key :player2,		String
+	key :url,			String
+	key :current,		String
+	key :winner,		String
+	key :status,		String
+	key :chessBoards,	String
 
-	field :gameId, type: Integer    
-	field :player1, type: String    
-	field :player2, type: String    
-	field :urlGame, type: String    
-	field :current, type: String    
-	field :winner, type: String    
-	field :status, type: String
-	field :chessBoard, type: String
+	# validations
+	# validates_presence_of :gameId, :player1
 
 end

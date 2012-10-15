@@ -17,8 +17,6 @@ APP_ID = 386008508137576 # your app id
 APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
 SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
 #SITE_URL = 'http://localhost:9292/'
-#MONGOHQ_URL = 'mongodb://<user>:<pass>@hatch.mongohq.com:10034/app003132345'
-#MONGOHQ_URL = 'mongodb://denny_ha@hotmail.com:P@ssw0rd@alex.mongohq.com:10019/app8043150'
 
 class CHESSMASTER < Sinatra::Application
 	

@@ -32,11 +32,10 @@ class CHESSMASTER < Sinatra::Application
 	#MongoMapper.database = 'mydb'
 	#MongoMapper.database.authenticate('','')
 
-	#db = URI.parse(ENV['MONGOHQ_URL'])
- 	#db_name = db.path.gsub(/^\//, '')
- 	#MongoMapper.connection  = Mongo::Connection.new(db.host, db.port).db(db_name)
- 	##MongoMapper.database	= 'ChessDB'
- 	#MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
+	db = URI.parse(ENV['MONGOHQ_URL'])
+ 	db_name = db.path.gsub(/^\//, '')
+ 	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port).db(db_name) 	
+ 	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
  	
  	#db = URI.parse(ENV['MONGOHQ_URL'])
 	#db_name = db.path.gsub(/^\//, '')
@@ -50,6 +49,12 @@ class CHESSMASTER < Sinatra::Application
 
 	#MongoMapper.connection  = @db_connection
 	#MongoMapper.database	= 'ChessDB'
+
+	get '/connection' do
+		db = URI.parse(ENV['MONGOHQ_URL'])
+ 		db_name = db.path.gsub(/^\//, '')
+ 		return MONGOHQ_URL + " DB " + db_name
+	end
 
 	get '/' do
 

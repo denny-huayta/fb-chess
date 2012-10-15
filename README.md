@@ -12,17 +12,18 @@ Play chess online! online chess battleground
 * Facebook API (http://developers.facebook.com/)
 * Koala (https://github.com/arsduo/koala)
 
-### Dehavior Driven Development
+### Behavior Driven Development
 * Cucumber (http://cukes.info/)
 * Cucumber-Sinatra (https://github.com/bernd/cucumber-sinatra)
+* capybara (https://github.com/jnicklas/capybara)
+* rspec (https://rubygems.org/gems/rspec)
 
 ### Database
 * MongoDB (http://www.mongodb.org/)
 * Mongo Mapper (http://mongomapper.com/)
 
-### Others Gem
+### Others
 * UUID generator (https://github.com/assaf/uuid)
-
 
 ## Stories
 * Sign up with facebook

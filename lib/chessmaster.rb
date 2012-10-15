@@ -43,7 +43,7 @@ class CHESSMASTER < Sinatra::Application
 	#@db_connection = Mongo::Connection.new(db.host, db.port).db(db_name)
 	#@db_connection.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
 	
-	config.gem "mongo_mapper"
+	#config.gem "mongo_mapper"
 
 	MongoMapper.config = { Rails.env => { 'uri' => ENV['MONGOHQ_URL'] } }
 	MongoMapper.connect(Rails.env)

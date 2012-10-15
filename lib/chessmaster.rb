@@ -52,7 +52,7 @@ class CHESSMASTER < Sinatra::Application
  	#db_name = db.path.gsub(/^\//, '')
  	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port)
  	MongoMapper.database = 'app8043150'
- 	#MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
+ 	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
 
 	get '/connection' do
 		db = URI.parse(ENV['MONGOHQ_URL'])

@@ -32,12 +32,20 @@ class CHESSMASTER < Sinatra::Application
 	#MongoMapper.database = 'mydb'
 	#MongoMapper.database.authenticate('','')
 
-	db = URI.parse(ENV['MONGOHQ_URL'])
- 	db_name = db.path.gsub(/^\//, '')
- 	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port).db(db_name)
+	#db = URI.parse(ENV['MONGOHQ_URL'])
+ 	#db_name = db.path.gsub(/^\//, '')
+ 	#MongoMapper.connection  = Mongo::Connection.new(db.host, db.port).db(db_name)
  	#MongoMapper.database	= 'ChessDB'
- 	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
+ 	#MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
  	
+ 	db = URI.parse(ENV['MONGOHQ_URL'])
+	db_name = db.path.gsub(/^\//, '')
+	@db_connection = Mongo::Connection.new(db.host, db.port).db(db_name)
+	@db_connection.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
+	
+
+	MongoMapper.connection = @db_connection
+
 
 	get '/' do
 

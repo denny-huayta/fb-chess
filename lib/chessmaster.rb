@@ -45,7 +45,7 @@ class CHESSMASTER < Sinatra::Application
 	
 
 	MongoMapper.connection  = @db_connection
-	MongoMapper.database	= 'ChessDB'
+	#MongoMapper.database	= 'ChessDB'
 
 	get '/' do
 

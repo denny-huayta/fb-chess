@@ -9,6 +9,7 @@ require 'mongo_mapper'
 #require 'uuid'
 
 require_relative 'game'
+require_relative 'chessboard'
 
 # register your app at facebook to get those infos
 APP_ID = 386008508137576 # your app id
@@ -120,6 +121,27 @@ class CHESSMASTER < Sinatra::Application
 
 	end
 
+	get '/play' do
+		@gameId		= params[:gameId]
+		@piece		= params[:piece]
+		@origin		= params[:origin]
+		@final		= params[:final]
+		@playerId 	= session['userId']
+
+		chessboard = Chessboard.where(:gameId => @gameId, :playerId => @playerId, :piece => @piece).first
+
+		chessboard.update_attributes(
+				:origin			=> @origin,
+				:final			=> @final,
+				:lastModified	=> Time.now.to_s
+			)
+		
+		result = Chessboard.where(:gameId => @gameId)
+
+		return result.to_json
+
+	end
+
 	get '/about' do
 		erb :about
 	end
@@ -138,7 +160,23 @@ class CHESSMASTER < Sinatra::Application
 		game.status				= 'New'
 		game.url     			= 'http://fb-chess.herokuapp.com/see?game=' +  game.gameId
 
+		
 		if game.save
+			status 201
+		else
+			status 401
+		end
+
+		# Load chessboard 
+		chessboard = Chessboard.new
+
+		chessboard.gameId		= game.gameId
+		chessboard.playerId		= session['userId']
+		chessboard.piece		= 'BlackHose'
+		chessboard.origin		= 'A2'
+		chessboard.final		= 'C1'
+
+		if chessboard.save
 			status 201
 		else
 			status 401

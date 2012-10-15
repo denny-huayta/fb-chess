@@ -6,6 +6,7 @@ require 'koala'
 require 'mongo'
 require 'json'
 require 'mongo_mapper'
+require 'uri'
 #require 'uuid'
 
 require_relative 'game'
@@ -16,6 +17,8 @@ APP_ID = 386008508137576 # your app id
 APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
 SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
 #SITE_URL = 'http://localhost:9292/'
+#MONGOHQ_URL = 'mongodb://<user>:<pass>@hatch.mongohq.com:10034/app003132345'
+#MONGOHQ_URL = 'mongodb://denny_ha@hotmail.com:P@ssw0rd@alex.mongohq.com:10019/app8043150'
 
 class CHESSMASTER < Sinatra::Application
 	
@@ -30,9 +33,9 @@ class CHESSMASTER < Sinatra::Application
 	#MongoMapper.database.authenticate('','')
 
 	db = URI.parse(ENV['MONGOHQ_URL'])
- 	#db_name = db.path.gsub(/^\//, '')
- 	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port) #.db(db_name)
- 	MongoMapper.database	= 'ChessDB'
+ 	db_name = db.path.gsub(/^\//, '')
+ 	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port).db(db_name)
+ 	#MongoMapper.database	= 'ChessDB'
  	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
  	
 

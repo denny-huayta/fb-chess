@@ -30,35 +30,10 @@ class CHESSMASTER < Sinatra::Application
 	#MongoMapper.database = 'mydb'
 	#MongoMapper.database.authenticate('','')
 
-	#db = URI.parse(ENV['MONGOHQ_URL'])
- 	#db_name = db.path.gsub(/^\//, '')
- 	#MongoMapper.connection  = Mongo::Connection.new(db.host, db.port).db(db_name) 	
- 	#MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
- 	
- 	#db = URI.parse(ENV['MONGOHQ_URL'])
-	#db_name = db.path.gsub(/^\//, '')
-	#@db_connection = Mongo::Connection.new(db.host, db.port).db(db_name)
-	#@db_connection.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
-	
-	#config.gem "mongo_mapper"
-
-	#MongoMapper.config = { Rails.env => { 'uri' => ENV['MONGOHQ_URL'] } }
-	#MongoMapper.connect(Rails.env)
-
-	#MongoMapper.connection  = @db_connection
-	#MongoMapper.database	= 'ChessDB'
-
-	db = URI.parse(ENV['MONGOHQ_URL'])
- 	#db_name = db.path.gsub(/^\//, '')
+	db = URI.parse(ENV['MONGOHQ_URL']) 	
  	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port)
  	MongoMapper.database = 'app8043150'
  	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
-
-	get '/connection' do
-		db = URI.parse(ENV['MONGOHQ_URL'])
- 		db_name = db.path.gsub(/^\//, '')
- 		return MONGOHQ_URL + " DB " + db_name
-	end
 
 	get '/' do
 
@@ -124,31 +99,36 @@ class CHESSMASTER < Sinatra::Application
   		#end
 	end
 
-	get '/mygames' do
-		@player1Id = session['userId']
-		@games = Game.where(:player1Id => @player1Id).order(:item)
+	get '/mygames' do		
 		#session['games'] = @games
-		#if session['access_token']		
-		erb :games
-		#else
-  			#redirect '/login'
-  		#end
+		if session['access_token']	
+
+			@player1Id = session['userId']
+			@games = Game.where(:player1Id => @player1Id).order(:item)
+
+			erb :games
+
+		else
+  			redirect '/login'
+  		end
 	end
 
 	get '/chessboard' do
 		#if session['access_token']
-		erb :chessboard
+			erb :chessboard
 		#else
-			#redirect '/login'
+			redirect '/login'
 		#end
   		
 	end
 
 	get '/see' do
-		@gameId = params[:game]
-		@game = Game.where(:gameId => @gameId).first
-
-		erb :chessboard
+		if session['access_token']	
+			@gameId = params[:game]
+			@game = Game.where(:gameId => @gameId).first
+		else
+			erb :chessboard
+		end
 
 	end
 
@@ -206,6 +186,10 @@ class CHESSMASTER < Sinatra::Application
 		chessboard.piece		= 'BlackHose'
 		chessboard.origin		= 'A2'
 		chessboard.final		= 'C1'
+
+		# Facebook
+		@graph = Koala::Facebook::GraphAPI.new(session["access_token"])
+		@graph.put_wall_post(game.player1 + " has created a chess game.! " + game.url )
 
 		if chessboard.save
 			status 201

@@ -45,8 +45,8 @@ class CHESSMASTER < Sinatra::Application
 	
 	#config.gem "mongo_mapper"
 
-	MongoMapper.config = { Rails.env => { 'uri' => ENV['MONGOHQ_URL'] } }
-	MongoMapper.connect(Rails.env)
+	#MongoMapper.config = { Rails.env => { 'uri' => ENV['MONGOHQ_URL'] } }
+	#MongoMapper.connect(Rails.env)
 
 	#MongoMapper.connection  = @db_connection
 	#MongoMapper.database	= 'ChessDB'

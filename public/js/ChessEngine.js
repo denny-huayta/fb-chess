@@ -4,6 +4,11 @@ var SourceItem = '';
 var board = null;
 var boardcolor = null;
 
+var PlayerTurnInfo = 'White';
+
+var ColorBlack = 'Black';
+var ColorWhite = 'White';
+
 var lookABC = {
     'A': 1,
     'B': 2,
@@ -36,14 +41,13 @@ function handleDragStart(e) {
 
     // No item
     if (board[this.id] == '') {
-        PrintDebug('None');
+        PrintDebug('No es una ficha');
         e.cancel = true;
         return;
     }
 
     // Check Rules
     Rule(board[this.id], this.id);
-
 
     this.style.opacity = '0.4';
 
@@ -73,8 +77,7 @@ function handleDragEnter(e) {
 }
 
 function handleDragLeave(e) {
-    this.classList.remove('over');  // this / e.target is previous target element.
-
+    this.classList.remove('over');  // this / e.target is previous target element.s
 }
 
 function handleDrop(e) {
@@ -86,6 +89,12 @@ function handleDrop(e) {
 
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
+        // Validate Moves
+        if (!ExistInArray(RuleValidMoves, this.id)) {
+            PrintDebug('Jugada no valida ' + this.id);
+            return;
+        }
+
         // Set the source column's HTML to the HTML of the column we dropped on.
         dragSrcEl.innerHTML = this.innerHTML;
         this.innerHTML = e.dataTransfer.getData('text/html');
@@ -124,7 +133,6 @@ var cols = document.querySelectorAll('.BaseBox');
     col.addEventListener('dragend', handleDragEnd, false);
 });
 
-
 //Init Board
 
 function InitBoard() {
@@ -151,384 +159,26 @@ function InitBoard() {
         'A2': 'W', 'B2': 'B', 'C2': 'W', 'D2': 'B', 'E2': 'W', 'F2': 'B', 'G2': 'W', 'H2': 'B',
         'A1': 'B', 'B1': 'W', 'C1': 'B', 'D1': 'W', 'E1': 'B', 'F1': 'W', 'G1': 'B', 'H1': 'W'
     };
-
-
+    
     for (var item in board) {
         //alert(item + " " + board[item]);
         $("#" + item).addClass(board[item]); ;
     }
-
 }
-
-InitBoard();
 
 //DEBUG
 function PrintDebug(value) {
     $("#DebugText").val(value);
 }
 
+function PrintTurno(value) {
+    $("#PlayerTurn").val(value);
+}
 
 // RULESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 
-function Rule(player, start) {
-
-    var paramCurrentX = parseInt(lookABC[start[0]]);
-    var paramCurrentY = parseInt(start[1]);
-    //var obj = null;
-
-    RuleValidMoves = new Array();
-
-    if (player == 'BlackPawn') {
-        Rule_BlackPawn(paramCurrentX, paramCurrentY);
-        RulesPaint(RuleValidMoves);
-    }
-
-    if (player == 'WhitePawn') {
-        Rule_WhitePawn(paramCurrentX, paramCurrentY);
-        RulesPaint(RuleValidMoves);
-        return;
-    }
-
-    if (player == 'BlackTower' || player == 'WhiteTower') {
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        contador = 0;
-
-        for (x = 1; x <= 8; x++) {
-
-            if (CurrentX != x) {
-                RuleValidMoves[contador] = look123[x] + CurrentY;
-                contador++;
-            }
-
-            if (CurrentY != x) {
-                RuleValidMoves[contador] = look123[CurrentX] + x;
-                contador++;
-            }
-        }
-
-        RulesPaint(RuleValidMoves);
-        return;
-    }
-
-    if (player == 'BlackBishop' || player == 'WhiteBishop') {
-
-        contador = 0;
-        // Bishop Position 1 ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 7; x++) {
-            if (IsInBoard(CurrentX - x, CurrentY - x)) {
-                RuleValidMoves[contador] = look123[CurrentX - x] + (CurrentY - x);
-                contador++;
-            }
-            else {
-                break;
-            }
-        }
-
-        // Bishop Position 3 ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 7; x++) {
-            if (IsInBoard(CurrentX + x, CurrentY - x)) {
-                RuleValidMoves[contador] = look123[CurrentX + x] + (CurrentY - x);
-                contador++;
-            }
-            else {
-                break;
-            }
-        }
-
-        // Bishop Position 7 ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 7; x++) {
-            if (IsInBoard(CurrentX - x, CurrentY + x)) {
-                RuleValidMoves[contador] = look123[CurrentX - x] + (CurrentY + x);
-                contador++;
-            }
-            else {
-                break;
-            }
-        }
-
-        // Bishop Position 8 ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 7; x++) {
-            if (IsInBoard(CurrentX + x, CurrentY + x)) {
-                RuleValidMoves[contador] = look123[CurrentX + x] + (CurrentY + x);
-                contador++;
-            }
-            else {
-                break;
-            }
-        }
-
-        // Paint Methods ----------------------------------------------------------------------------------
-        RulesPaint(RuleValidMoves);
-        return;
-    }
-
-    if (player == 'BlackHorse' || player == 'WhiteHorse') {
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        contador = 0;
-
-        // Horse Position 3 
-        CurrentX = paramCurrentX + 1;
-        CurrentY = paramCurrentY - 2;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-        // Horse Position 1 
-        CurrentX = paramCurrentX - 1;
-        CurrentY = paramCurrentY - 2;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // Horse Position 7 
-        CurrentX = paramCurrentX - 1;
-        CurrentY = paramCurrentY + 2;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-        // Horse Position 9 
-        CurrentX = paramCurrentX + 1;
-        CurrentY = paramCurrentY + 2;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // Horse Position 91 
-        CurrentX = paramCurrentX + 2;
-        CurrentY = paramCurrentY + 1;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-        // Horse Position 71 
-        CurrentX = paramCurrentX - 2;
-        CurrentY = paramCurrentY + 1;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // Horse Position 31 
-        CurrentX = paramCurrentX + 2;
-        CurrentY = paramCurrentY - 1;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-        // Horse Position 11
-        CurrentX = paramCurrentX - 2;
-        CurrentY = paramCurrentY - 1;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-
-        }
-        RulesPaint(RuleValidMoves);
-        return;
-    }
-
-    // King
-    if (player == 'WhiteKing' || player == 'BlackKing') {
-
-        contador = 0;
-
-        RuleValidMoves = new Array();
-
-        // King Position 9
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-        CurrentY++;
-        CurrentX++;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // King Position 8
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-        CurrentY++;
-
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // King Position 7
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-        CurrentY++;
-        CurrentX--;
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // King Position 6
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-        CurrentX++;
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // King Position 4
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-        //CurrentY--;
-        CurrentX--;
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // King Position 3
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-        CurrentY--;
-        CurrentX++;
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // King Position 2
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-        CurrentY--;
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // King Position 1
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-        CurrentY--;
-        CurrentX--;
-        if (IsInBoard(CurrentX, CurrentY)) {
-            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
-            contador++;
-        }
-
-        // Paint
-        RulesPaint(RuleValidMoves);
-        return;
-    }
-
-    if (player == 'BlackQueen' || player == 'WhiteQueen') {
-
-        contador = 0;
-        // Queen Position 1 ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 7; x++) {
-            if (IsInBoard(CurrentX - x, CurrentY - x)) {
-                RuleValidMoves[contador] = look123[CurrentX - x] + (CurrentY - x);
-                contador++;
-            }
-            else {
-                break;
-            }
-        }
-
-        // Queen Position 3 ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 7; x++) {
-            if (IsInBoard(CurrentX + x, CurrentY - x)) {
-                RuleValidMoves[contador] = look123[CurrentX + x] + (CurrentY - x);
-                contador++;
-            }
-            else {
-                break;
-            }
-        }
-
-        // Queen Position 7 ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 7; x++) {
-            if (IsInBoard(CurrentX - x, CurrentY + x)) {
-                RuleValidMoves[contador] = look123[CurrentX - x] + (CurrentY + x);
-                contador++;
-            }
-            else {
-                break;
-            }
-        }
-
-        // Queen Position 8 ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 7; x++) {
-            if (IsInBoard(CurrentX + x, CurrentY + x)) {
-                RuleValidMoves[contador] = look123[CurrentX + x] + (CurrentY + x);
-                contador++;
-            }
-            else {
-                break;
-            }
-        }
-
-        // Queen Position Horizontal and Vertical ----------------------------------------------------------------------------------
-        CurrentX = paramCurrentX;
-        CurrentY = paramCurrentY;
-
-        for (x = 1; x <= 8; x++) {
-
-            if (CurrentX != x) {
-                RuleValidMoves[contador] = look123[x] + CurrentY;
-                contador++;
-            }
-
-            if (CurrentY != x) {
-                RuleValidMoves[contador] = look123[CurrentX] + x;
-                contador++;
-            }
-        }
-
-        // Paint Methods ----------------------------------------------------------------------------------
-        RulesPaint(RuleValidMoves);
-        return;
-    }
-}
-
 function RuleClean() {
-
+    // Pinta el tablero con los colores
     for (CurrentX = 1; CurrentX <= 8; CurrentX++) {
         for (CurrentY = 1; CurrentY <= 8; CurrentY++) {
 
@@ -543,7 +193,7 @@ function RuleClean() {
 }
 
 function RulesPaint(moves) {
-
+    // Pinta las jugadas validas MOVES en el tablero
     if ($.isArray(moves) == false) return;
 
     var i = moves.length;
@@ -559,7 +209,19 @@ function RulesPaint(moves) {
     }
 }
 
+function ExistInArray(moves, currentmove) {
+    // Valida si CurrentMove existe en moves - judadas validas
+    var lista = '';
+
+    for (var i in moves) {
+        if (moves[i] == currentmove) return true;
+    }
+
+    return false;
+}
+
 function IsInBoard(x, y) {
+    // Valida que exista la posicion dentro del tablero
     var result = true;
 
     if (x > 8) result = false;
@@ -571,36 +233,20 @@ function IsInBoard(x, y) {
     return result;
 }
 
-// Rules
+function RuleIsValidPos(color, CurrentPos) {
+    // Valida que la nueva posicion no tenga una ficha del mismo color adentro, 
+    //true si es igual a color 
+    //false si es diferenter a color
+    var TargetItem = '' + board[CurrentPos];
 
-function Rule_WhitePawn(paramCurrentX, paramCurrentY) {
-    CurrentX = paramCurrentX;
-    CurrentY = paramCurrentY;
+    //PrintDebug('Valid Pos ' + CurrentPos + ' ' + TargetItem);
 
-    CurrentY++;
-
-    RuleValidMoves[0] = look123[CurrentX] + CurrentY;
-
-    if (paramCurrentY == 2) {
-        CurrentY++;
-        RuleValidMoves[1] = look123[CurrentX] + CurrentY;
+    if (TargetItem.indexOf(color, 0) >= 0) {
+        return false;
     }
 
-    return;
+    return true;
 }
 
-function Rule_BlackPawn(paramCurrentX, paramCurrentY) {
-    CurrentX = paramCurrentX;
-    CurrentY = paramCurrentY;
-
-    CurrentY--;
-
-    RuleValidMoves[0] = look123[CurrentX] + CurrentY;
-
-    if (paramCurrentY == 7) {
-        CurrentY--;
-        RuleValidMoves[1] = look123[CurrentX] + CurrentY;
-    }
-
-    return;
-}
+//Init Game
+InitBoard();

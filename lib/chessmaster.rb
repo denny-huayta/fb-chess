@@ -87,9 +87,9 @@ class CHESSMASTER < Sinatra::Application
   		
 	end
 
-	get '/chessboard/:game' do |game|
+	get '/see/:name' do |n|
 			
-		@game = Game.where(:gameId => "#{game}").first
+		@game = Game.where(:gameId => "#{n}").first
 
 		#return @game.player1
 
@@ -115,6 +115,18 @@ class CHESSMASTER < Sinatra::Application
 		else
 			status 401
 		end
+
+		@games = Game.all
+
+		erb :games
+	end
+
+	get '/challenge/:name' do |n|
+		game = Game.where(:gameId => "#{n}").first
+		game.update_attributes(
+			:player2 => 'Jose Perez',
+			:status => 'In Progress'
+			)
 
 		@games = Game.all
 

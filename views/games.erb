@@ -21,7 +21,10 @@
 							Player 2
 						</td>
 						<td>
-							Url Game
+							See Game
+						</td>
+						<td>
+							Challenge
 						</td>
 						<td>
 							Status
@@ -30,15 +33,19 @@
 				</thead>
 				<tbody>
 				<% unless @games.empty? %>
-				<% @games.each do |game| %>				
+				<% @count = 0 %>
+				<% @games.each do |game| %>	
+					<% @count = @count + 1 %>		
 					<tr>
-						<td> <%= game.gameId %>
+						<td> <%= @count %>
 						</td>
 						<td> <%= game.player1 %>
 						</td>
 						<td> <%= game.player2 %>
 						</td>
-						<td> <a href="/chessboard/<%= game.gameId %>"><%= game.url %></a>							
+						<td><a href="/see/<%=game.gameId%>" class="btn" method="post">See</a>				
+						</td>
+						<td><a href="/challenge/<%=game.gameId%>" class="btn" method="post">Play</a>
 						</td>
 						<td> <%= game.status %>
 						</td>

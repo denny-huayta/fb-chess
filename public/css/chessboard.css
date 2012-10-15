@@ -9,6 +9,11 @@
     background-color: #c0c0c0;
 }
 
+.ChessBoard
+{
+float:left;
+}
+
 .ColorB
 {
     background-color: #c0c0c0;
@@ -121,8 +126,9 @@
 /*-------- debug --------- */
 .DebugBox
 {
-    width:708px;
+    width:408px;
     text-align:center;
+    float:right;
 }
 
 .DebugInfo

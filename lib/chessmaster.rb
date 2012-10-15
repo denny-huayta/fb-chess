@@ -123,6 +123,7 @@ class CHESSMASTER < Sinatra::Application
 
 		game.update_attributes(
 			:player2 => 'Jose Perez',
+			:current => game.player1,
 			:status => 'In Progress'
 			)
 

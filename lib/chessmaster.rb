@@ -4,7 +4,6 @@ require 'rubygems'
 require 'sinatra'
 require 'koala'
 require 'mongo'
-require 'mongoid'
 require 'json'
 require 'mongo_mapper'
 #require 'uuid'
@@ -87,9 +86,9 @@ class CHESSMASTER < Sinatra::Application
   		
 	end
 
-	get '/see/:name' do |n|
-			
-		@game = Game.where(:gameId => "#{n}").first
+	get '/see' do
+		@game = params[:game]
+		@game = Game.where(:gameId => @game).first
 
 		#return @game.player1
 
@@ -121,8 +120,10 @@ class CHESSMASTER < Sinatra::Application
 		erb :games
 	end
 
-	get '/challenge/:name' do |n|
-		game = Game.where(:gameId => "#{n}").first
+	get '/challenge' do
+		@gameId = params[:game]
+		#game = Game.where(:gameId => "#{n}").first
+		game = Game.where(:gameId => @gameId).first
 		game.update_attributes(
 			:player2 => 'Jose Perez',
 			:status => 'In Progress'

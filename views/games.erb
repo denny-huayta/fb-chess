@@ -43,9 +43,9 @@
 						</td>
 						<td> <%= game.player2 %>
 						</td>
-						<td><a href="/see/<%=game.gameId%>" class="btn" method="post">See</a>				
+						<td><a href="/see?game=<%=game.gameId%>" class="btn" method="post">See</a>				
 						</td>
-						<td><a href="/challenge/<%=game.gameId%>" class="btn" method="post">Play</a>
+						<td><a href="/challenge?game=<%=game.gameId%>" class="btn" method="post">Play</a>
 						</td>
 						<td> <%= game.status %>
 						</td>

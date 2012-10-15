@@ -2,8 +2,6 @@ require 'rubygems'
 require 'sinatra'
 require 'koala'
 require 'mongo'
-require 'mongoid'
-require 'json'
 require 'mongo_mapper'
 require 'uuid'
 

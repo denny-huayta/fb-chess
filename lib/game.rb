@@ -8,6 +8,7 @@ require 'uuid'
 class Game
 	include MongoMapper::Document
 
+	key :item,			Integer
 	key :gameId,		String
 	key :player1,		String
 	key :player2,		String

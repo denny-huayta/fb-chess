@@ -21,6 +21,9 @@
 							Player 2
 						</td>
 						<td>
+							Winner
+						</td>
+						<td>
 							See Game
 						</td>
 						<td>
@@ -32,16 +35,16 @@
 					</tr>
 				</thead>
 				<tbody>
-				<% unless @games.empty? %>
-				<% @count = 0 %>
-				<% @games.each do |game| %>	
-					<% @count = @count + 1 %>		
+				<% unless @games.empty? %>				
+				<% @games.each do |game| %>							
 					<tr>
-						<td> <%= @count %>
+						<td> <%= game.item %>
 						</td>
 						<td> <%= game.player1 %>
 						</td>
 						<td> <%= game.player2 %>
+						</td>
+						<td> <%= game.winner %>
 						</td>
 						<td><a href="/see?game=<%=game.gameId%>" class="btn" method="post">See</a>				
 						</td>

@@ -65,10 +65,8 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/games' do
-				
-		#@games.insert(game)
-	
-		@games = Game.all
+
+		@games = Game.all(:order => :item.asc)
 		#session['games'] = @games
 		#if session['access_token']		
 		erb :games
@@ -87,10 +85,8 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/see' do
-		@game = params[:game]
-		@game = Game.where(:gameId => @game).first
-
-		#return @game.player1
+		@gameId = params[:game]
+		@game = Game.where(:gameId => @gameId).first
 
 		erb :chessboard
 
@@ -104,6 +100,7 @@ class CHESSMASTER < Sinatra::Application
 		uuid = UUID.new
 		game = Game.new
 
+		game.item	 = Game.count + 1
 		game.gameId	 = uuid.generate
 		game.player1 = 'Denny Huayta'
 		game.status	 = 'New'
@@ -115,32 +112,30 @@ class CHESSMASTER < Sinatra::Application
 			status 401
 		end
 
-		@games = Game.all
+		@games = Game.all(:order => :item.asc)
 
 		erb :games
 	end
 
 	get '/challenge' do
 		@gameId = params[:game]
-		#game = Game.where(:gameId => "#{n}").first
 		game = Game.where(:gameId => @gameId).first
+
 		game.update_attributes(
 			:player2 => 'Jose Perez',
 			:status => 'In Progress'
 			)
 
-		@games = Game.all
+		@games = Game.all(:order => :item.asc)
 
 		erb :games
 	end
 
 	get '/deleteall' do
 		Game.destroy_all
-
 		@games = Game.all
 
 		erb :games
-
 	end
 
 end

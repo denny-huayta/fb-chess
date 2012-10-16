@@ -7,16 +7,16 @@ require 'mongo'
 require 'json'
 require 'mongo_mapper'
 require 'uri'
-#require 'uuid'
 
 require_relative 'game'
 require_relative 'chessboard'
+require_relative 'chessmasterbo'
 
 # register your app at facebook to get those infos
 APP_ID = 386008508137576 # your app id
 APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
-SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
-#SITE_URL = 'http://localhost:9292/'
+#SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
+SITE_URL = 'http://localhost:9292/'
 
 class CHESSMASTER < Sinatra::Application
 	
@@ -25,41 +25,30 @@ class CHESSMASTER < Sinatra::Application
 	set :root, APP_ROOT
 	enable :sessions
 
-	# Mongo Mapper Connection
-	#MongoMapper.connection = Mongo::Connection.new('localhost',27017, :pool_size => 5, :timeout => 5)
-	#MongoMapper.database = 'mydb'
-	#MongoMapper.database.authenticate('','')
+	chessmasterbo = Chessmasterbo.new
 
-	db = URI.parse(ENV['MONGOHQ_URL']) 	
- 	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port)
- 	MongoMapper.database = 'app8043150'
- 	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
+	# Mongo Mapper Connection
+	MongoMapper.connection = Mongo::Connection.new('localhost',27017, :pool_size => 5, :timeout => 5)
+	MongoMapper.database = 'mydb'
+
+	#db = URI.parse(ENV['MONGOHQ_URL']) 	
+ 	#MongoMapper.connection  = Mongo::Connection.new(db.host, db.port)
+ 	#MongoMapper.database = 'app8043150'
+ 	#MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
 
 	get '/' do
 
-		# TO BE DELETED
-		#session['userId']	= '123456789'
-		#session['name']		= 'Denny Huayta'
-		#session['username']	= 'dhuayta'
-		#session['email']	= 'denny_ha@hotmail.com'
-
-
 		if session['access_token']
-		 	#'You are logged in! <a href="/logout">Logout</a>'
-			# do some stuff with facebook here
-			# for example:
-			#@graph = Koala::Facebook::GraphAPI.new(session["access_token"])
-			# publish to your wall (if you have the permissions)
-			#@graph.put_wall_post("Sign up from Chessmaster!" + Time.now.to_s )
-			# or publish to someone else (if you have the permissions too ;) )
-			# @graph.put_wall_post("Checkout my new cool app!", {}, "someoneelse's id")
 
 			@api = Koala::Facebook::API.new(session[:access_token])
 			@user_info = @api.get_object("me")
-			session['userId']	= @user_info['id']
-			session['name']		= @user_info['name']
-			session['username']	= @user_info['username']
-			session['email']	= @user_info['email']
+
+			session['userInfo'] = @user_info
+
+			#session['userId']	= @user_info['id']
+			#session['name']		= @user_info['name']
+			#session['username']	= @user_info['username']
+			#session['email']	= @user_info['email']
 
 			erb :index
 		else
@@ -67,12 +56,9 @@ class CHESSMASTER < Sinatra::Application
 		end		
 	end
 
-	get '/login' do
-		# generate a new oauth object with your app data and your callback url
+	get '/login' do		
 		session['oauth'] = Facebook::OAuth.new(APP_ID, APP_CODE, SITE_URL + 'callback')
-		# redirect to facebook to get your code
-		redirect session['oauth'].url_for_oauth_code(:permissions => "publish_stream")
-		# redirect session['oauth'].url_for_oauth_code()
+		redirect session['oauth'].url_for_oauth_code(:permissions => "publish_stream")		
 	end
 
 	get '/logout' do
@@ -89,42 +75,45 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/games' do
-
 		@games = Game.all(:order => :item.asc)
-		#session['games'] = @games
-		#if session['access_token']		
-		erb :games
-		#else
-  			#redirect '/login'
-  		#end
+		if session['access_token']		
+			erb :games
+		else
+  			redirect '/login'
+  		end
 	end
 
-	get '/mygames' do		
-		#session['games'] = @games
-		if session['access_token']	
-
-			@player1Id = session['userId']
-			@games = Game.where(:player1Id => @player1Id).order(:item)
-
-			erb :games
+	get '/mygames' do
+		if session['access_token']
+			
+			@games = Game.where(:player1Id => session['userId']).order(:item)
+			erb :mygames
 
 		else
   			redirect '/login'
   		end
 	end
 
+	get '/mygamenew' do	
+		if session['access_token']	
+			userInfo = session['userInfo']		
+			game = chessmasterbo.newgame(userInfo)
+			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)
+			@games = Game.where(:player1Id => userInfo['id']).order(:item)
+			erb :mygames
+		else
+  			redirect '/login'
+  		end
+	end
+
 	get '/chessboard' do
-		#if session['access_token']
-			erb :chessboard
-		#else
-			#redirect '/login'
-		#end
-  		
+		erb :chessboard	
 	end
 
 	get '/see' do
 		if session['access_token']	
-			@gameId = params[:game]
+			@gameId = params[:gameId]
+			@userInfo = session['userInfo']
 			@game = Game.where(:gameId => @gameId).first
 			erb :chessboard
 		else
@@ -134,24 +123,8 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/play' do
-		@gameId		= params[:gameId]
-		@piece		= params[:piece]
-		@origin		= params[:origin]
-		@final		= params[:final]
-		@playerId 	= session['userId']
-
-		chessboard = Chessboard.where(:gameId => @gameId, :playerId => @playerId, :piece => @piece).first
-
-		chessboard.update_attributes(
-				:origin			=> @origin,
-				:final			=> @final,
-				:lastModified	=> Time.now.to_s
-			)
-		
-		result = Chessboard.where(:gameId => @gameId)
-
-		return result.to_json
-
+		result = chessmasterbo.updatechessboard(params[:gameId], params[:piece], params[:origin], params[:final])		
+		return result# chessmasterbo.writelisttojson(result).to_json #result.to_json
 	end
 
 	get '/about' do
@@ -159,70 +132,31 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/new' do
-		uuid = UUID.new
-		game = Game.new
-
-		game.item				= Game.count + 1
-		game.gameId	 			= uuid.generate
-		game.player1 			= session['name']
-		game.player1Id			= session['userId']
-		game.player1UserName	= session['username']
-		game.player1Email		= session['email']
-		game.creationDate		= Time.now.to_s
-		game.status				= 'New'
-		game.url     			= 'http://fb-chess.herokuapp.com/see?game=' +  game.gameId
-
-		
-		if game.save
-			status 201
+		if session['access_token']	
+			userInfo = session['userInfo']		
+			game = chessmasterbo.newgame(userInfo)
+			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)
+			# publish Facebook
+			chessmasterbo.putwallpost(session["access_token"], game.player1 + " has created a chess game.! " + game.url)
+			@games = Game.all(:order => :item.asc)
+			erb :games
 		else
-			status 401
-		end
-
-		# Load chessboard 
-		chessboard = Chessboard.new
-
-		chessboard.gameId		= game.gameId
-		chessboard.playerId		= session['userId']
-		chessboard.piece		= 'BlackHose'
-		chessboard.origin		= 'A2'
-		chessboard.final		= 'C1'
-
-		# Facebook
-		@graph = Koala::Facebook::GraphAPI.new(session["access_token"])
-		@graph.put_wall_post(game.player1 + " has created a chess game.! " + game.url )
-
-		if chessboard.save
-			status 201
-		else
-			status 401
-		end
-
-		@games = Game.all(:order => :item.asc)
-
-		erb :games
+  			redirect '/login'
+  		end
 	end
 
 	get '/challenge' do
-		@gameId = params[:game]
-		game = Game.where(:gameId => @gameId).first
-
-		game.update_attributes(
-			:player2 => 'Jose Perez',
-			:currentPlayer => game.player1,
-			:currentPlayerId => game.player1Id,
-			:status => 'In Progress'
-			)
-
+		gameId = params[:gameId]
+		chessmasterbo.challenge(gameId, session['userInfo'])
+		chessmasterbo.loadchessboardblack(gameId, session['userInfo'])
 		@games = Game.all(:order => :item.asc)
-
 		erb :games
 	end
 
 	get '/deleteall' do
 		Game.destroy_all
+		Chessboard.destroy_all
 		@games = Game.all
-
 		erb :games
 	end
 

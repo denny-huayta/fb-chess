@@ -6,7 +6,7 @@
 			</h1>
 			<p>If you want create new game press "new game" button.</p>
 			<p>
-				<a class="btn btn-success" href="/new" method="post">New Game</a>				
+				<a class="btn btn-success" href="/mygamenew" method="post">New Game</a>				
 			</p>
 			<!--
 			<div class="alert">
@@ -31,7 +31,7 @@
 						</td>
 						<td>See Game
 						</td>
-						<td>Challenge
+						<td>Delete Game
 						</td>
 						<td>Status
 						</td>				
@@ -55,7 +55,7 @@
 						</td>
 						<td><a href="/see?game=<%=game.gameId%>" class="btn" method="post">See</a>				
 						</td>
-						<td><a href="/challenge?game=<%=game.gameId%>" class="btn" method="post">Play</a>
+						<td><a href="/delete?game=<%=game.gameId%>" class="btn" method="post">Delete</a>
 						</td>
 						<td> <%= game.status %>
 						</td>

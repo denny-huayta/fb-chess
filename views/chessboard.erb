@@ -1,10 +1,19 @@
 <div class="row">
   <div class="span12">
+    <script language="javascript" type="text/javascript">
+        var gameInfo = jQuery.parseJSON('<%= @game.to_json %>') ;
+        var userInfo = jQuery.parseJSON('<%= @userInfo.to_json %>') ;
 
+        function showmessage(){
+          alert(gameInfo.player1);
+        }
+
+    </script>
     <div class='DebugBox'>
       Debug
       <br />
       <input type="text" id="DebugText" name="DebugText" class="DebugInfo" />
+      <input type="button" onclick="showmessage()" value="Show Message" />
       <br />
       Turno: <br />
       <input type="text" id="PlayerTurn" name="PlayerTurn" class="DebugInfo" />

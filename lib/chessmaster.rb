@@ -117,7 +117,7 @@ class CHESSMASTER < Sinatra::Application
 		#if session['access_token']
 			erb :chessboard
 		#else
-			redirect '/login'
+			#redirect '/login'
 		#end
   		
 	end

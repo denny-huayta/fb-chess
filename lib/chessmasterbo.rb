@@ -6,9 +6,26 @@ require 'json'
 require 'mongo_mapper'
 require 'uri'
 
+require_relative 'chessuser'
+
 class Chessmasterbo
 	
 	enable :sessions
+
+	def verifyuser(userInfo, tokken)
+		userId = userInfo['id']
+		usr = ChessUser.where(:userId => userId).first
+		if usr.nil?
+			user = ChessUser.new
+			user.userId				= userInfo['id']
+			user.name 				= userInfo['name']		
+			user.userName			= userInfo['username']
+			user.email				= userInfo['email']
+			user.tokken				= tokken
+			user.creationDate		= Time.now.to_s
+			user.save
+		end		
+	end
 
 	def newgame(userInfo)
 		
@@ -17,8 +34,8 @@ class Chessmasterbo
 
 		game.item				= Game.count + 1
 		game.gameId	 			= uuid.generate
-		game.player1 			= userInfo['name']
 		game.player1Id			= userInfo['id']
+		game.player1 			= userInfo['name']		
 		game.player1UserName	= userInfo['username']
 		game.player1Email		= userInfo['email']
 		game.creationDate		= Time.now.to_s

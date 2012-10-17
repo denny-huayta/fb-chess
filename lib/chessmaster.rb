@@ -11,6 +11,7 @@ require 'uri'
 require_relative 'game'
 require_relative 'chessboard'
 require_relative 'chessmasterbo'
+require_relative 'chessuser'
 
 # register your app at facebook to get those infos
 APP_ID = 386008508137576 # your app id
@@ -44,7 +45,7 @@ class CHESSMASTER < Sinatra::Application
 			@user_info = @api.get_object("me")
 
 			session['userInfo'] = @user_info
-
+			chessmasterbo.verifyuser(@user_info, session[:access_token])
 			#session['userId']	= @user_info['id']
 			#session['name']		= @user_info['name']
 			#session['username']	= @user_info['username']
@@ -131,6 +132,7 @@ class CHESSMASTER < Sinatra::Application
 			@gameId = params[:gameId]
 			@userInfo = session['userInfo']
 			@game = Game.where(:gameId => @gameId).first
+			@challenger = ChessUser.where(:userId => @game.player2Id).first
 			erb :chessboard
 		else
 			redirect '/login'

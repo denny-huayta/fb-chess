@@ -1,4 +1,30 @@
 <div class="row">
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : '386008508137576', // App ID from the App Dashboard
+      channelUrl : '//localhost:9292//channel.html', // Channel File for x-domain communication
+      status     : true, // check the login status upon init?
+      cookie     : true, // set sessions cookies to allow your server to access the session?
+      xfbml      : true  // parse XFBML tags on this page?
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+
+    };
+
+  // Load the SDK's source Asynchronously
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=386008508137576";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+
   <div class="span12">
     <script language="javascript" type="text/javascript">
         var gameInfo = '<%= @game.to_json %>';
@@ -10,6 +36,10 @@
         }
 
     </script>
+
+    <div class="fb-comments" data-href='<%= @game.url %>' data-num-posts="5" data-width="470">
+    </div>
+
     <div class='DebugBox'>
       Debug
       <br />
@@ -19,7 +49,14 @@
       Turno: <br />
       <input type="text" id="PlayerTurn" name="PlayerTurn" class="DebugInfo" />
     </div>
-
+    <div>
+      <% @graphPlayer1 = Koala::Facebook::API.new(session[:access_token]) %>      
+      <img src="<%= @graphPlayer1.get_picture("me")%>"/>
+    <div/>
+    <div>      
+      <% @graphPlayer2 = Koala::Facebook::API.new(@challenger.tokken) %>
+      <img src="<%= @graphPlayer2.get_picture("me")%>"/>
+    <div/>
     <div class="ChessBoard">
 
 

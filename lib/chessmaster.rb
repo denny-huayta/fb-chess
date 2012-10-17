@@ -58,7 +58,11 @@ class CHESSMASTER < Sinatra::Application
 
 	get '/login' do		
 		session['oauth'] = Facebook::OAuth.new(APP_ID, APP_CODE, SITE_URL + 'callback')
-		redirect session['oauth'].url_for_oauth_code(:permissions => "publish_stream")		
+		redirect session['oauth'].url_for_oauth_code(:permissions => "publish_stream")
+		# Save UserInfo
+		@api = Koala::Facebook::API.new(session[:access_token])
+		@user_info = @api.get_object("me")
+		session['userInfo'] = @user_info
 	end
 
 	get '/logout' do
@@ -85,8 +89,8 @@ class CHESSMASTER < Sinatra::Application
 
 	get '/mygames' do
 		if session['access_token']
-			
-			@games = Game.where(:player1Id => session['userId']).order(:item)
+			userInfo = session['userInfo']
+			@games = Game.where(:player1Id => userInfo['id']).order(:item)
 			erb :mygames
 
 		else
@@ -99,6 +103,18 @@ class CHESSMASTER < Sinatra::Application
 			userInfo = session['userInfo']		
 			game = chessmasterbo.newgame(userInfo)
 			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)
+			@games = Game.where(:player1Id => userInfo['id']).order(:item)
+			erb :mygames
+		else
+  			redirect '/login'
+  		end
+	end
+
+	get '/mygamedelete' do
+		if session['access_token']
+			gameId = params[:gameId]
+			userInfo = session['userInfo']			
+			Game.where(:player1Id => userInfo['id'], :gameId => gameId).first.destroy			
 			@games = Game.where(:player1Id => userInfo['id']).order(:item)
 			erb :mygames
 		else
@@ -137,7 +153,7 @@ class CHESSMASTER < Sinatra::Application
 			game = chessmasterbo.newgame(userInfo)
 			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)
 			# publish Facebook
-			chessmasterbo.putwallpost(session["access_token"], game.player1 + " has created a chess game.! " + game.url)
+			#chessmasterbo.putwallpost(session["access_token"], game.player1 + " has created a chess game.! " + game.url)
 			@games = Game.all(:order => :item.asc)
 			erb :games
 		else

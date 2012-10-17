@@ -18,7 +18,7 @@ class Chessmasterbo
 		game.item				= Game.count + 1
 		game.gameId	 			= uuid.generate
 		game.player1 			= userInfo['name']
-		game.player1Id			= userInfo['Id']
+		game.player1Id			= userInfo['id']
 		game.player1UserName	= userInfo['username']
 		game.player1Email		= userInfo['email']
 		game.creationDate		= Time.now.to_s

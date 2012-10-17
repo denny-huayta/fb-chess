@@ -25,6 +25,8 @@
 						</td>
 						<td>Player 2
 						</td>
+						<td>Current Player Id
+						</td>
 						<td>Current Player
 						</td>
 						<td>Winner
@@ -49,13 +51,15 @@
 						</td>
 						<td> <%= game.player2 %>
 						</td>
+						<td> <%= game.currentPlayerId %>
+						</td>
 						<td> <%= game.currentPlayer %>
 						</td>
 						<td> <%= game.winner %>
 						</td>
-						<td><a href="/see?game=<%=game.gameId%>" class="btn" method="post">See</a>				
+						<td><a href="/see?gameId=<%=game.gameId%>" class="btn" method="post">See</a>				
 						</td>
-						<td><a href="/delete?game=<%=game.gameId%>" class="btn" method="post">Delete</a>
+						<td><a href="/mygamedelete?gameId=<%=game.gameId%>" class="btn" method="post">Delete</a>
 						</td>
 						<td> <%= game.status %>
 						</td>

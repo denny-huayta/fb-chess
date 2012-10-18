@@ -156,7 +156,7 @@ class CHESSMASTER < Sinatra::Application
 
 	get '/play' do
 		result = chessmasterbo.updatechessboard(params[:gameId], params[:piece], params[:origin], params[:final])		
-		return result # chessmasterbo.writelisttojson(result).to_json #result.to_json
+		return result
 	end
 	get '/getchessboard' do
 		chessboard = Chessboard.where(:gameId => params[:gameId]).all(:order => :item.asc)
@@ -167,11 +167,18 @@ class CHESSMASTER < Sinatra::Application
 		return @game.to_json
 	end
 
-	get '/deleteall' do
+	get '/deleteallgames' do
+		Game.destroy_all
+		Chessboard.destroy_all	
+		redirect '/games'
+	end
+
+	get 'deleteall' do 
 		Game.destroy_all
 		Chessboard.destroy_all
-		@games = Game.all
-		erb :games
+		ChessUser.destroy_all
+		redirect '/games'
+
 	end
 
 end

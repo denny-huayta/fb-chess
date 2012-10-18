@@ -30,9 +30,8 @@
         var gameInfo = '<%= @game.to_json %>';
         var userInfo = '<%= @userInfo.to_json %>';
 
-          function showmessage(){
+          function ShowGameID(){
           game = jQuery.parseJSON(gameInfo);
-          //alert(game.player1);
           alert(game.gameId);
           }
 
@@ -43,10 +42,9 @@
       Debug
       <br />
       <input type="text" id="DebugText" name="DebugText" class="DebugInfo" />
-      <input type="button" onclick="showmessage()" value="Show Message" />
       <br />
       Turno: <br />
-      <input type="text" id="DebugInfo" name="DebugInfo" class="DebugInfo" />
+      <input type="text" id="DebugText2" name="DebugText2" class="DebugInfo" />
     
     <div class="PlayerBox">
     <div class="PlayerBox1">

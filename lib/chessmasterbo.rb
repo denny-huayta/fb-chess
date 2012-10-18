@@ -13,8 +13,8 @@ class Chessmasterbo
 	enable :sessions
 
 	def verifyuser(userInfo, tokken)
-		userId = userInfo['id']
-		usr = ChessUser.where(:userId => userId).first
+		userId 	= userInfo['id']
+		usr 	= ChessUser.where(:userId => userId).first
 		if usr.nil?
 			user = ChessUser.new
 			user.userId				= userInfo['id']
@@ -90,49 +90,61 @@ class Chessmasterbo
 
 	def updatechessboard(gameId, piece, origin, final)
 		status = '1'
-		piece1 = Chessboard.where(:gameId => gameId, :piece => piece, :final => origin, :status => '1').first		
+		piece1 = Chessboard.where(:gameId => gameId, :piece => piece, :final => origin, :status => '1').first
+
+
+		#TODO: Validate final position
 
 		if piece1
 			game = Game.where(:gameId => gameId).first
 			statusGame 	= game.status
 			winner 		= game.winner
 			winnerId 	= game.winnerId
-			piece2 = Chessboard.where(:gameId => gameId, :final => final, :status => '1').first
-			if piece2
-				piece2.update_attributes(						
-						:status 		=> '0',
-						:lastModified	=> Time.now.to_s
+
+			unless statusGame == 'Finished'
+				# Verify if one piece should be killed
+				piece2 = Chessboard.where(:gameId => gameId, :final => final, :status => '1').first
+				if piece2
+					# Update piece staus to death
+					piece2.update_attributes(						
+							:status 		=> '0',
+							:lastModified	=> Time.now.to_s
+						)
+					# If is a king the game should be finished
+					if piece2.piece == 'WhiteKing'
+						statusGame	= 'Finished'
+						winner 		= game.player2
+						winnerId	= game.player2Id
+					end
+
+					if piece2.piece == 'BlackKing'
+						statusGame	= 'Finished'
+						winner 		= game.player1
+						winnerId	= game.player1Id
+					end
+				end
+				# Update game status and winner
+				game.update_attributes(
+						:lastMove 		=> Time.now.to_s
+						:winner 		=> winner,
+						:winnerId 		=> winnerId,
+						:status 		=> statusGame,
 					)
 
-				if piece2.piece = 'WhiteKing'
-					statusGame	= 'Finished'
-					winner 		= game.player2
-					winnerId	= game.player2Id
-				end
+				# Update piece with final position
+				piece1.update_attributes(
+						:origin			=> origin,
+						:final			=> final,	
+						:lastModified	=> Time.now.to_s
+					)
+				# Find all chessboard
+				olist = Chessboard.where(:gameId => gameId).all(:order => :item.asc)
 
-				if piece2.piece = 'BlackKing'
-					statusGame	= 'Finished'
-					winner 		= game.player1
-					winnerId	= game.player1Id
-				end
+				# return Chessboard as Json List
+				return writelisttojson(olist)
+			else
+				return 'ERROR'
 			end
-			#TODO: Validate final position
-			
-			game.update_attributes(
-				:lastMove 			=> Time.now.to_s
-				)
-
-			piece1.update_attributes(
-					:origin			=> origin,
-					:final			=> final,
-					:winner 		=> winner,
-					:winnerId 		=> winnerId,
-					:status 		=> status,
-					:lastModified	=> Time.now.to_s
-				)
-			olist = Chessboard.where(:gameId => gameId).all(:order => :item.asc)
-
-			return writelisttojson(olist)
 
 		else
 			return 'ERROR'

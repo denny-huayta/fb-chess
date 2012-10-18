@@ -102,6 +102,8 @@ function handleDrop(e) {
         dragSrcEl.className = 'BaseBox Color' + boardcolor[SourceItem];
         PrintDebug('Done from ' + SourceItem + ' to ' + this.id);
 
+        NetConnect_SendMove(board[SourceItem], SourceItem, this.id);
+
         var TmpPlayer = board[SourceItem];
         board[this.id] = TmpPlayer;
         board[SourceItem] = '';
@@ -176,7 +178,7 @@ function PrintTurno(value) {
 }
 
 // RULESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-
+ 
 function RuleClean() {
     // Pinta el tablero con los colores
     for (CurrentX = 1; CurrentX <= 8; CurrentX++) {

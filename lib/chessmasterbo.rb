@@ -124,11 +124,11 @@ class Chessmasterbo
 					end
 				end
 				# Update game status and winner
-				game.update_attributes(
-						:lastMove 		=> Time.now.to_s
+				game.update_attributes(						
 						:winner 		=> winner,
 						:winnerId 		=> winnerId,
 						:status 		=> statusGame,
+						:lastMove 		=> Time.now.to_s
 					)
 
 				# Update piece with final position

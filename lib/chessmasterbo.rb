@@ -93,15 +93,31 @@ class Chessmasterbo
 		piece1 = Chessboard.where(:gameId => gameId, :piece => piece, :final => origin, :status => '1').first		
 
 		if piece1
+			game = Game.where(:gameId => gameId).first
+			statusGame 	= game.status
+			winner 		= game.winner
+			winnerId 	= game.winnerId
 			piece2 = Chessboard.where(:gameId => gameId, :final => final, :status => '1').first
 			if piece2
 				piece2.update_attributes(						
 						:status 		=> '0',
 						:lastModified	=> Time.now.to_s
 					)
+
+				if piece2.piece = 'WhiteKing'
+					statusGame	= 'Finished'
+					winner 		= game.player2
+					winnerId	= game.player2Id
+				end
+
+				if piece2.piece = 'BlackKing'
+					statusGame	= 'Finished'
+					winner 		= game.player1
+					winnerId	= game.player1Id
+				end
 			end
 			#TODO: Validate final position
-			game = Game.where(:gameId => gameId).first
+			
 			game.update_attributes(
 				:lastMove 			=> Time.now.to_s
 				)
@@ -109,6 +125,8 @@ class Chessmasterbo
 			piece1.update_attributes(
 					:origin			=> origin,
 					:final			=> final,
+					:winner 		=> winner,
+					:winnerId 		=> winnerId,
 					:status 		=> status,
 					:lastModified	=> Time.now.to_s
 				)

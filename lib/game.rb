@@ -22,6 +22,7 @@ class Game
 	key :currentPlayer,		String
 	key :currentPlayerId,	String
 	key :winner,			String
+	key :winnerId,			String
 	key :status,			String
 	key :creationDate,		String
 	key :lastMove,			String

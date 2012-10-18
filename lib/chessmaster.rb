@@ -160,7 +160,7 @@ class CHESSMASTER < Sinatra::Application
 	end
 	get '/getchessboard' do
 		chessboard = Chessboard.where(:gameId => params[:gameId]).all(:order => :item.asc)
-		return chessmasterbo.writelisttojsonresult(chessboard)
+		return chessmasterbo.writelisttojson(chessboard)
 	end
 	get '/getchessstatus' do		
 		@game = Game.where(:gameId => params[:gameId]).first			

@@ -13,6 +13,7 @@ class Chessboard
 	key :piece,				String
 	key :origin,			String
 	key :final,				String
+	key :status,			String
 	key :lastModified,		String
 	
 	# validations

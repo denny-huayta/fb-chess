@@ -4,7 +4,7 @@
 			<h1>
 			My Games
 			</h1>
-			<p>If you want create new game press "new game" button.</p>
+			<p>If you want create new game press "new game".</p>
 			<p>
 				<a class="btn btn-success" href="/mygamenew" method="post">New Game</a>				
 			</p>
@@ -18,15 +18,11 @@
 				<thead>
 					<tr>
 						<td>Item
+						</td>						
+						<td>Player 1 (White)
 						</td>
-						<td>Player 1 Id
-						</td>
-						<td>Player 1
-						</td>
-						<td>Player 2
-						</td>
-						<td>Current Player Id
-						</td>
+						<td>Player 2 (Black)
+						</td>						
 						<td>Current Player
 						</td>
 						<td>Winner
@@ -44,15 +40,11 @@
 				<% @games.each do |game| %>							
 					<tr>
 						<td> <%= game.item %>
-						</td>
-						<td> <%= game.player1Id %>
-						</td>
+						</td>						
 						<td> <%= game.player1 %>
 						</td>
 						<td> <%= game.player2 %>
-						</td>
-						<td> <%= game.currentPlayerId %>
-						</td>
+						</td>						
 						<td> <%= game.currentPlayer %>
 						</td>
 						<td> <%= game.winner %>

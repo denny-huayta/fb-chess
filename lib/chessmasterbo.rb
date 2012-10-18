@@ -90,15 +90,27 @@ class Chessmasterbo
 
 		chessboard = Chessboard.where(:gameId => gameId, :piece => piece, :final => origin).first
 
-		chessboard.update_attributes(
-				:origin			=> origin,
-				:final			=> final,
-				:lastModified	=> Time.now.to_s
-			)
-		
-		olist = Chessboard.all(:order => :item.asc)
+		if chessboard
+			#TODO: Validate final position
+			game = Game.where(:gameId => gameId).first
+			game.update_attributes(
+				:lastMove 			=> Time.now.to_s
+				)
 
-		return writelisttojson(olist)
+			chessboard.update_attributes(
+					:origin			=> origin,
+					:final			=> final,
+					:lastModified	=> Time.now.to_s
+				)
+			olist = Chessboard.all(:order => :item.asc)
+
+			return writelisttojson(olist)
+
+		else
+			return 'ERROR'
+		end
+
+		
 	end
 
 	def savepiece(gameId, piece, initial, final, userInfo)

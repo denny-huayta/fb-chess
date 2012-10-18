@@ -4,7 +4,7 @@
 			<h1>
 			Games
 			</h1>
-			<p>If you want play chess press new game button.</p>
+			<p>If you want create new game press "new game".</p>
 			<p>
 				<a class="btn btn-success" href="/new" method="post">New Game</a>				
 			</p>
@@ -19,11 +19,9 @@
 					<tr>
 						<td>Item
 						</td>
-						<td>Player 1 Id
+						<td>Player 1 (White)
 						</td>
-						<td>Player 1
-						</td>
-						<td>Player 2
+						<td>Player 2 (Black)
 						</td>
 						<td>Current Player
 						</td>
@@ -46,8 +44,6 @@
 				<% @games.each do |game| %>							
 					<tr>
 						<td> <%= game.item %>
-						</td>
-						<td> <%= game.player1Id %>
 						</td>
 						<td> <%= game.player1 %>
 						</td>

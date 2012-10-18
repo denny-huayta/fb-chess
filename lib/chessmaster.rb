@@ -88,12 +88,24 @@ class CHESSMASTER < Sinatra::Application
   		end
 	end
 
+	get '/new' do
+		if session['access_token']	
+			userInfo = session['userInfo']		
+			game = chessmasterbo.newgame(userInfo)
+			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)
+			# publish Facebook
+			#chessmasterbo.putwallpost(session["access_token"], game.player1 + " has created a chess game.! " + game.url)
+			redirect '/games'
+		else
+  			redirect '/login'
+  		end
+	end
+
 	get '/mygames' do
 		if session['access_token']
 			userInfo = session['userInfo']
 			@games = Game.where(:player1Id => userInfo['id']).order(:item)
 			erb :mygames
-
 		else
   			redirect '/login'
   		end
@@ -103,9 +115,8 @@ class CHESSMASTER < Sinatra::Application
 		if session['access_token']	
 			userInfo = session['userInfo']		
 			game = chessmasterbo.newgame(userInfo)
-			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)
-			@games = Game.where(:player1Id => userInfo['id']).order(:item)
-			erb :mygames
+			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)			
+			redirect '/mygames'
 		else
   			redirect '/login'
   		end
@@ -116,15 +127,10 @@ class CHESSMASTER < Sinatra::Application
 			gameId = params[:gameId]
 			userInfo = session['userInfo']			
 			Game.where(:player1Id => userInfo['id'], :gameId => gameId).first.destroy			
-			@games = Game.where(:player1Id => userInfo['id']).order(:item)
-			erb :mygames
+			redirect '/mygames'
 		else
   			redirect '/login'
   		end
-	end
-
-	get '/chessboard' do
-		erb :chessboard	
 	end
 
 	get '/see' do
@@ -140,6 +146,17 @@ class CHESSMASTER < Sinatra::Application
 
 	end
 
+	get '/about' do
+		erb :about
+	end
+
+	get '/challenge' do
+		gameId = params[:gameId]
+		chessmasterbo.challenge(gameId, session['userInfo'])
+		chessmasterbo.loadchessboardblack(gameId, session['userInfo'])
+		redirect '/games'
+	end
+
 	get '/play' do
 		result = chessmasterbo.updatechessboard(params[:gameId], params[:piece], params[:origin], params[:final])		
 		return result # chessmasterbo.writelisttojson(result).to_json #result.to_json
@@ -150,32 +167,6 @@ class CHESSMASTER < Sinatra::Application
 		return @game.to_json
 	end
 
-	get '/about' do
-		erb :about
-	end
-
-	get '/new' do
-		if session['access_token']	
-			userInfo = session['userInfo']		
-			game = chessmasterbo.newgame(userInfo)
-			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)
-			# publish Facebook
-			#chessmasterbo.putwallpost(session["access_token"], game.player1 + " has created a chess game.! " + game.url)
-			@games = Game.all(:order => :item.asc)
-			erb :games
-		else
-  			redirect '/login'
-  		end
-	end
-
-	get '/challenge' do
-		gameId = params[:gameId]
-		chessmasterbo.challenge(gameId, session['userInfo'])
-		chessmasterbo.loadchessboardblack(gameId, session['userInfo'])
-		@games = Game.all(:order => :item.asc)
-		erb :games
-	end
-
 	get '/deleteall' do
 		Game.destroy_all
 		Chessboard.destroy_all
@@ -184,4 +175,3 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 end
-

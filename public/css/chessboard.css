@@ -135,3 +135,40 @@ float:left;
 {
     width:70%;
 }
+
+.PlayerBox
+{
+    margin-right:auto;
+    margin-left:auto;
+    
+    width:300px;
+    overflow:hidden;
+    clear:both;
+}
+
+.PlayerBox1
+{
+    border:1px solid black;
+    width:90%;
+    margin:5px;
+    height:60px;
+}
+
+.PlayerBox2
+{
+    border:1px solid black;
+    width:90%;
+    margin:5px;
+    height:60px;
+}
+
+
+.PlayerBox1 img
+{
+float:left;
+}
+
+.PlayerBox2 img
+{
+float:left;
+}

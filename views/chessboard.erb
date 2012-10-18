@@ -10,9 +10,6 @@
       cookie     : true, // set sessions cookies to allow your server to access the session?
       xfbml      : true  // parse XFBML tags on this page?
     });
-
-    // Additional initialization code such as adding Event Listeners goes here
-
     };
 
   // Load the SDK's source Asynchronously
@@ -37,8 +34,6 @@
 
     </script>
 
-    <div class="fb-comments" data-href='<%= @game.url %>' data-num-posts="5" data-width="470">
-    </div>
 
     <div class='DebugBox'>
       Debug
@@ -48,16 +43,23 @@
       <br />
       Turno: <br />
       <input type="text" id="PlayerTurn" name="PlayerTurn" class="DebugInfo" />
-    </div>
-    <div>
-      <% @graphPlayer1 = Koala::Facebook::API.new(session[:access_token]) %>      
+    
+    <div class="PlayerBox">
+    <div class="PlayerBox1">
+      <% @graphPlayer1 = Koala::Facebook::API.new(session[:access_token]) %>
       <img src="<%= @graphPlayer1.get_picture("me")%>"/>
-    <div/>
-    <div>      
+    </div>
+    <div class="PlayerBox2">
       <% @graphPlayer2 = Koala::Facebook::API.new(@challenger.tokken) %>
       <img src="<%= @graphPlayer2.get_picture("me")%>"/>
-    <div/>
-    <div class="ChessBoard">
+    </div>
+
+      <div class="fb-comments" data-href='<%= @game.url %>' data-num-posts="5" data-width="300">
+      </div>
+
+    </div>
+    </div>
+      <div class="ChessBoard">
 
 
       <div class="BaseLine">

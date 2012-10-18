@@ -132,10 +132,16 @@ class CHESSMASTER < Sinatra::Application
 
 	get '/see' do
 		if session['access_token']	
-			@gameId = params[:gameId]
-			@userInfo = session['userInfo']
+			@gameId 	= params[:gameId]
+			@userInfo 	= session['userInfo']
 			@game = Game.where(:gameId => @gameId).first
-			@challenger = ChessUser.where(:userId => @game.player2Id).first
+			
+			if @userInfo['id'] == @game.player1Id
+				@challenger = ChessUser.where(:userId => @game.player2Id).first
+			else
+				@challenger = ChessUser.where(:userId => @game.player1Id).first
+			end
+			
 			erb :chessboard
 		else
 			redirect '/login'
@@ -173,7 +179,7 @@ class CHESSMASTER < Sinatra::Application
 		redirect '/games'
 	end
 
-	get 'deleteall' do 
+	get '/deleteall' do 
 		Game.destroy_all
 		Chessboard.destroy_all
 		ChessUser.destroy_all

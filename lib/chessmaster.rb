@@ -161,7 +161,10 @@ class CHESSMASTER < Sinatra::Application
 		result = chessmasterbo.updatechessboard(params[:gameId], params[:piece], params[:origin], params[:final])		
 		return result # chessmasterbo.writelisttojson(result).to_json #result.to_json
 	end
-
+	get '/getchessboard' do
+		chessboard = Chessboard.where(:gameId => params[:gameId]).all(:order => :item.asc)
+		return chessmasterbo.writelisttojson(chessboard)
+	end
 	get '/getchessstatus' do		
 		@game = Game.where(:gameId => params[:gameId]).first			
 		return @game.to_json

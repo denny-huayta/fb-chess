@@ -57,9 +57,15 @@
 						</td>
 						<td> <%= game.winner %>
 						</td>
-						<td><a href="/see?gameId=<%=game.gameId%>" class="btn" method="post">See</a>				
-						</td>
-						<td><a href="/challenge?gameId=<%=game.gameId%>" class="btn" method="post">Play</a>
+						<td>
+							<% unless game.player2.nil?  %>	
+							<a href="/see?gameId=<%=game.gameId%>" class="btn" method="post">See</a>
+							<% end %>
+						</td>						
+						<td>
+							<% if game.player1Id != @user_info['id'] %>	
+							<a href="/challenge?gameId=<%=game.gameId%>" class="btn" method="post">Play</a>
+							<% end %>							
 						</td>
 						<td> <%= game.status %>
 						</td>

@@ -49,7 +49,10 @@
 						</td>
 						<td> <%= game.winner %>
 						</td>
-						<td><a href="/see?gameId=<%=game.gameId%>" class="btn" method="post">See</a>				
+						<td>
+							<% unless game.player2.nil?  %>	
+							<a href="/see?gameId=<%=game.gameId%>" class="btn" method="post">See</a>
+							<% end %>									
 						</td>
 						<td><a href="/mygamedelete?gameId=<%=game.gameId%>" class="btn" method="post">Delete</a>
 						</td>

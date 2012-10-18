@@ -46,10 +46,6 @@ class CHESSMASTER < Sinatra::Application
 
 			session['userInfo'] = @user_info
 			chessmasterbo.verifyuser(@user_info, session[:access_token])
-			#session['userId']	= @user_info['id']
-			#session['name']		= @user_info['name']
-			#session['username']	= @user_info['username']
-			#session['email']	= @user_info['email']
 
 			erb :index
 		else
@@ -80,7 +76,8 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/games' do
-		@games = Game.all(:order => :item.asc)
+		@games 		= Game.all(:order => :item.asc)
+		@user_info 	= session['userInfo']
 		if session['access_token']		
 			erb :games
 		else
@@ -163,7 +160,7 @@ class CHESSMASTER < Sinatra::Application
 	end
 	get '/getchessboard' do
 		chessboard = Chessboard.where(:gameId => params[:gameId]).all(:order => :item.asc)
-		return chessmasterbo.writelisttojson(chessboard)
+		return chessmasterbo.writelisttojsonresult(chessboard)
 	end
 	get '/getchessstatus' do		
 		@game = Game.where(:gameId => params[:gameId]).first			

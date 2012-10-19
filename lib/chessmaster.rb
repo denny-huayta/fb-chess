@@ -101,7 +101,7 @@ class CHESSMASTER < Sinatra::Application
 	get '/mygames' do
 		if session['access_token']
 			userInfo = session['userInfo']
-			@games = Game.where(:player1Id => userInfo['id']).order(:item)
+			@games = Game.where(:$or => [{:player1Id => userInfo['id']}, {:player2Id => userInfo['id']}]).order(:item)
 			erb :mygames
 		else
   			redirect '/login'
@@ -134,7 +134,7 @@ class CHESSMASTER < Sinatra::Application
 		if session['access_token']	
 			@gameId 	= params[:gameId]
 			@userInfo 	= session['userInfo']
-			@game = Game.where(:gameId => @gameId).first
+			@game 		= Game.where(:gameId => @gameId).first
 			
 			if @userInfo['id'] == @game.player1Id
 				@challenger = ChessUser.where(:userId => @game.player2Id).first
@@ -157,6 +157,7 @@ class CHESSMASTER < Sinatra::Application
 		gameId = params[:gameId]
 		chessmasterbo.challenge(gameId, session['userInfo'])
 		chessmasterbo.loadchessboardblack(gameId, session['userInfo'])
+		#chessmasterbo.putwallpost(session["access_token"], game.player1 + " has created a chess game.! " + game.url)
 		redirect '/games'
 	end
 
@@ -164,10 +165,12 @@ class CHESSMASTER < Sinatra::Application
 		result = chessmasterbo.updatechessboard(params[:gameId], params[:piece], params[:origin], params[:final])		
 		return result
 	end
+
 	get '/getchessboard' do
 		chessboard = Chessboard.where(:gameId => params[:gameId]).all(:order => :item.asc)
 		return chessmasterbo.writelisttojson(chessboard)
 	end
+
 	get '/getchessstatus' do		
 		@game = Game.where(:gameId => params[:gameId]).first			
 		return @game.to_json

@@ -40,7 +40,8 @@ class Chessmasterbo
 		game.player1Email		= userInfo['email']
 		game.creationDate		= Time.now.to_s
 		game.status				= 'New'
-		game.url     			= 'http://fb-chess.herokuapp.com/see?game=' +  game.gameId		
+		#game.url     			= 'http://fb-chess.herokuapp.com/see?gameId=' +  game.gameId
+		game.url     			= 'http://localhost:9292/see?gameId=' +  game.gameId		
 		game.save
 
 		return game
@@ -88,15 +89,25 @@ class Chessmasterbo
 		savepiece(gameId, 'BlackPawn',		'H7', 'H7', status, userInfo)
 	end
 
-	def updatechessboard(gameId, piece, origin, final)
-		status = '1'
-		piece1 = Chessboard.where(:gameId => gameId, :piece => piece, :final => origin, :status => '1').first
+	def isvalidmove(game, piece)
+		rightmove 	= false
+		if piece.include? 'White' and game.player1Id == game.currentPlayerId
+			rightmove = true
+		end
+		if piece.include? 'Black' and game.player2Id == game.currentPlayerId
+			rightmove = true
+		end
+		return rightmove
+	end
 
+	def updatechessboard(gameId, piece, origin, final)
+		status 		= '1'		
+		piece1		= Chessboard.where(:gameId => gameId, :piece => piece, :final => origin, :status => '1').first
+		game 		= Game.where(:gameId => gameId).first	
 
 		#TODO: Validate final position
-
-		if piece1
-			game = Game.where(:gameId => gameId).first
+		if piece1 and isvalidmove(game, piece) 
+			
 			statusGame 	= game.status
 			winner 		= game.winner
 			winnerId 	= game.winnerId
@@ -125,8 +136,8 @@ class Chessmasterbo
 						winnerId	= game.player1Id
 					end
 				end
-				# Update game status and winner
 
+				# Check current player
 				if game.player1Id == game.currentPlayerId
 					currentPlayer	= game.player2
 					currentPlayerId	= game.player2Id
@@ -134,6 +145,8 @@ class Chessmasterbo
 					currentPlayer	= game.player1
 					currentPlayerId	= game.player1Id
 				end
+				
+				# Update game status and winner 				
 				game.update_attributes(						
 						:winner 		=> winner,
 						:winnerId 		=> winnerId,

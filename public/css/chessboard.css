@@ -1,7 +1,7 @@
 .BaseLine
 {
-    height: 88px;
-    width: 704px;
+    height: 70px;
+    width: 568px;
     clear: both;
     border-top: 1px solid black;
     border-right: 1px solid black;
@@ -37,8 +37,8 @@ float:left;
 
 .BaseBox
 {
-    height: 88px;
-    width: 87px;
+    height: 70px;
+    width: 70px;
     float: left;
     background-repeat: no-repeat;
     background-position: center center;
@@ -148,27 +148,30 @@ float:left;
 
 .PlayerBox1
 {
-    border:1px solid black;
+
     width:90%;
     margin:5px;
     height:60px;
+    text-align:center;
 }
 
 .PlayerBox2
 {
-    border:1px solid black;
     width:90%;
     margin:5px;
     height:60px;
 }
 
 
-.PlayerBox1 img
+.PlayerBox1_img
 {
 float:left;
+text-align:left;
 }
 
-.PlayerBox2 img
+.PlayerBox2_img
 {
-float:left;
+float:right;
+
+text-align:right;
 }

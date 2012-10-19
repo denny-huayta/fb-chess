@@ -4,10 +4,12 @@ var SourceItem = '';
 var board = null;
 var boardcolor = null;
 
-var PlayerTurnInfo = 'White';
+// My Color
+var PlayerCurrentColor = 'Black';
 
 var ColorBlack = 'Black';
 var ColorWhite = 'White';
+
 
 var lookABC = {
     'A': 1,
@@ -46,6 +48,12 @@ function handleDragStart(e) {
         return;
     }
 
+    // No color
+    if (board[this.id].indexOf(PlayerCurrentColor) < 0) {
+        PrintDebug('Ficha de otro color');
+        e.cancel = true;
+        return;
+    }
     // Check Rules
     Rule(board[this.id], this.id);
 
@@ -248,6 +256,25 @@ function RuleIsValidPos(color, CurrentPos) {
     }
 
     return true;
+}
+
+function MyUser_GetColor() {
+
+    var myColor = 'Black';
+
+    var itemuser = jQuery.parseJSON(userInfo);
+    var game = jQuery.parseJSON(gameInfo);
+
+
+    
+
+    if (itemuser.id == game.player1Id) myColor = 'White';
+
+    $("#DebugJs").html("CurrentColor " + myColor);
+
+    
+    return myColor;
+    
 }
 
 //Init Game

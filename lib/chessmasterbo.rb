@@ -100,6 +100,8 @@ class Chessmasterbo
 			statusGame 	= game.status
 			winner 		= game.winner
 			winnerId 	= game.winnerId
+			currentPlayerId = game.currentPlayerId
+			currentPlayer	= game.currentPlayer
 
 			unless statusGame == 'Finished'
 				# Verify if one piece should be killed
@@ -124,13 +126,23 @@ class Chessmasterbo
 					end
 				end
 				# Update game status and winner
+
+				if game.player1Id == game.currentPlayerId
+					currentPlayer	= game.player2
+					currentPlayerId	= game.player2Id
+				else
+					currentPlayer	= game.player1
+					currentPlayerId	= game.player1Id
+				end
 				game.update_attributes(						
 						:winner 		=> winner,
 						:winnerId 		=> winnerId,
 						:status 		=> statusGame,
+						:currentPlayer 	=> currentPlayer,
+						:currentPlayerId => currentPlayerId,
 						:lastMove 		=> Time.now.to_s
 					)
-
+				
 				# Update piece with final position
 				piece1.update_attributes(
 						:origin			=> origin,

@@ -1,3 +1,6 @@
+var PopupVisible = false;
+var FirsLoad = true;
+
 // Every 5 Seconds check the status
 function NetConnect() {
     
@@ -6,17 +9,37 @@ function NetConnect() {
 
     var game = jQuery.parseJSON(gameInfo);
 
+    var purl = "getchessstatus?gameId=" + game.gameId;
+
+    $.ajax({ url: purl, cache: false }).done(function (html) { ParseJS(html) });
+
+
+    //PrintDebug(texto);
+
+    if (FirsLoad) {
+        NetConnect_GetBoard();
+        FirsLoad = false;
+        PlayerCurrentColor = MyUser_GetColor();
+    }
+}
+
+function NetConnect_GetBoard() {
+
+    var objDate = new Date();
+    var texto = objDate.getTime(); //  + " GameID " + game.gameId;
+
+    var game = jQuery.parseJSON(gameInfo);
+
     var purl = "getchessboard?gameId=" + game.gameId;
 
     $.ajax({ url: purl, cache: false }).done(function (html) { ParseMoves(html) });
-    
+
 
     //PrintDebug(texto);
 }
 
 function ParseMoves(html) {
 
-    
     var resultado = "Inicio";
     //$("#DebugJs").html(resultado);
 
@@ -47,10 +70,44 @@ function ParseMoves(html) {
 
     RuleClean();
 
-    $("#DebugJs").html(resultado);
+   // $("#DebugJs").html(resultado);
 
 }
 
+function ParseJS(html) {
+
+    if (html == "ERROR") {
+        $("#DebugJs").html("Error");
+        return;
+    }
+
+    var item = jQuery.parseJSON(html);
+
+    var itemuser = jQuery.parseJSON(userInfo);
+
+   // $("#DebugJs").html("CurrentTurn " + item.currentPlayerId + "<br> Current " + itemuser.id);
+
+
+    // Mostrar Warning Turno
+    if (item.currentPlayerId == itemuser.id) {
+
+        if (PopupVisible == false) {
+            $("#AlertBox").show("slow");
+            PopupVisible = true;
+            NetConnect_GetBoard();
+        }
+    }
+    else {
+
+        if (PopupVisible == true) {
+            $("#AlertBox").hide("slow");
+            PopupVisible = false;
+            NetConnect_GetBoard();
+        }
+    }
+
+
+}
 function NetConnect_SendMove(piece,source, target) {
     var objDate = new Date();
     var texto = objDate.getTime(); //  + " GameID " + game.gameId;

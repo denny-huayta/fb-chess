@@ -4,7 +4,7 @@
     window.fbAsyncInit = function() {
     // init the FB JS SDK
     FB.init({
-    appId      : '386008508137576', // App ID from the App Dashboard
+    appId      : '107968099362923', // App ID from the App Dashboard
     channelUrl : '//localhost:9292//channel.html', // Channel File for x-domain communication
     status     : true, // check the login status upon init?
     cookie     : true, // set sessions cookies to allow your server to access the session?
@@ -28,8 +28,9 @@
 
   <div class="span12">
     <script language="javascript" type="text/javascript">
-      var gameInfo = '<%= @game.to_json %>';
-      var userInfo = '<%= @userInfo.to_json %>';
+      var gameInfo        = '<%= @game.to_json %>';
+      var userInfo        = '<%= @userInfo.to_json %>';
+      var challengerInfo  = '<%= @challenger.to_json %>';
 
       function ShowGameID(){
       game = jQuery.parseJSON(gameInfo);
@@ -38,25 +39,22 @@
 
     </script>
 
-    
-
-
     <div class='DebugBox'>
       VS
       <div class="PlayerBox">
         <div class="PlayerBox1">
-          <% @graphPlayer1 = Koala::Facebook::API.new(session[:access_token]) %>
+          <% @graphuser = Koala::Facebook::API.new(@userInfo.token) %>
           <div class="PlayerBox1_img">
-            <img src="<%= @graphPlayer1.get_picture('me') %>" />
+            <img src="<%= @graphuser.get_picture('me') %>" />
             </br>
-            <%= @game.player1UserName %>
+            <%= @userInfo.name %>
           </div>
 
-          <div class="PlayerBox2_img">
-            <% @graphPlayer2 = Koala::Facebook::API.new(@challenger.tokken) %>
-            <img src="<%= @graphPlayer2.get_picture('me') %>" class="PlayerBox2_img" />
+          <div class="PlayerBox2_img">  
+            <% @fbapichallenger = Koala::Facebook::API.new(@challenger.token) %>         
+            <img src="<%= @fbapichallenger.get_picture('me') %>" class="PlayerBox2_img" />
             </br>
-            <%= @game.player2UserName %>
+            <%= @challenger.name %>
           </div>
         </div>
 
@@ -80,7 +78,7 @@
 
       <div class="alert" style='display:none' id='AlertBox' name='AlertBox'>
         <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>JUEGO!</strong> Es tu turno, use su mejor estrategia.
+        <strong>Play!</strong> It's your turn, use your best strategy.
       </div>
 
       <div class="BaseLine">

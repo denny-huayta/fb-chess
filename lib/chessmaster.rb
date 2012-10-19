@@ -14,10 +14,14 @@ require_relative 'chessmasterbo'
 require_relative 'chessuser'
 
 # register your app at facebook to get those infos
-APP_ID = 386008508137576 # your app id
-APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
+#APP_ID = 386008508137576 # your app id
+#APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
 #SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
-SITE_URL = 'http://localhost:9292/'
+
+APP_ID = 107968099362923 # your app id
+APP_CODE = '2ee22141b401f2aa98bbee0865ed21a3' # your app code
+SITE_URL = 'http://localhost:9292/'  # your app site url
+
 
 class CHESSMASTER < Sinatra::Application
 	
@@ -132,11 +136,11 @@ class CHESSMASTER < Sinatra::Application
 
 	get '/see' do
 		if session['access_token']	
-			@gameId 	= params[:gameId]
-			@userInfo 	= session['userInfo']
-			@game 		= Game.where(:gameId => @gameId).first
+			gameId 		= params[:gameId]		
+			@game 		= Game.where(:gameId => gameId).first
+			@userInfo 	= ChessUser.where(:userId => session['userInfo']['id']).first
 			
-			if @userInfo['id'] == @game.player1Id
+			if @userInfo['userId'] == @game.player1Id
 				@challenger = ChessUser.where(:userId => @game.player2Id).first
 			else
 				@challenger = ChessUser.where(:userId => @game.player1Id).first

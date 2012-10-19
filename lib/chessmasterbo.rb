@@ -6,22 +6,21 @@ require 'json'
 require 'mongo_mapper'
 require 'uri'
 
-require_relative 'chessuser'
-
 class Chessmasterbo
 	
 	enable :sessions
 
-	def verifyuser(userInfo, tokken)
+	def verifyuser(userInfo, token)
 		userId 	= userInfo['id']
 		usr 	= ChessUser.where(:userId => userId).first
 		if usr.nil?
+			
 			user = ChessUser.new
 			user.userId				= userInfo['id']
 			user.name 				= userInfo['name']		
 			user.userName			= userInfo['username']
 			user.email				= userInfo['email']
-			user.tokken				= tokken
+			user.token				= token
 			user.creationDate		= Time.now.to_s
 			user.save
 		end		
@@ -202,11 +201,15 @@ class Chessmasterbo
 			)
 	end
 
-	def putwallpost(access_token, message)
-		@graph = Koala::Facebook::GraphAPI.new(access_token)
-		@graph.put_wall_post(message)
+	def putwallpost(token, message)
+		graph = Koala::Facebook::GraphAPI.new(token)
+		graph.put_wall_post(message)
 	end
 
+	def geturlpicture(token)
+		fbapi = Koala::Facebook::API.new(token)
+		return fbapi.get_picture('me')
+	end
 
 	def writelisttojson(olist)
 		result = ''

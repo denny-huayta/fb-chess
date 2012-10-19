@@ -11,9 +11,9 @@ class ChessUser
 	key :name,				String # name
 	key :userName,			String # username
 	key :email,				String
-	key :tokken,			String
+	key :token,				String
 	key :creationDate,		String
-
+	key :urlPicture,		String # From Facebook
 	# validations
 	# validates_presence_of :gameId, :player1
 

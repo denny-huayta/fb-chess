@@ -268,7 +268,7 @@ function MyUser_GetColor() {
 
     
 
-    if (itemuser.id == game.player1Id) myColor = 'White';
+    if (itemuser.userId == game.player1Id) myColor = 'White';
 
     $("#DebugJs").html("CurrentColor " + myColor);
 

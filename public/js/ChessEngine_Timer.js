@@ -85,11 +85,11 @@ function ParseJS(html) {
 
     var itemuser = jQuery.parseJSON(userInfo);
 
-   // $("#DebugJs").html("CurrentTurn " + item.currentPlayerId + "<br> Current " + itemuser.id);
+   // $("#DebugJs").html("CurrentTurn " + item.currentPlayerId + "<br> Current " + itemuser.userId);
 
 
     // Mostrar Warning Turno
-    if (item.currentPlayerId == itemuser.id) {
+    if (item.currentPlayerId == itemuser.userId) {
 
         if (PopupVisible == false) {
             $("#AlertBox").show("slow");

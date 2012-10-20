@@ -5,11 +5,13 @@ var board = null;
 var boardcolor = null;
 
 // My Color
-var PlayerCurrentColor = 'Black';
-
+var PlayerCurrentColor = ''; // Black or White MyUser_GetColor()
+var PlayerCurrentID = 0;
 var ColorBlack = 'Black';
 var ColorWhite = 'White';
 
+// Current Turn
+var CurrentTurnPlayerID = 0;
 
 var lookABC = {
     'A': 1,
@@ -61,6 +63,14 @@ function handleDragStart(e) {
         e.cancel = true;
         return;
     }
+
+    // No Curreent player
+    if (PlayerCurrentID != CurrentTurnPlayerID) {
+      PrintDebug('Turno Incorrecto');
+        e.cancel = true;
+        return;
+    };
+
     // Check Rules
     Rule(board[this.id], this.id);
 
@@ -298,19 +308,19 @@ function RuleIsValidPos(color, CurrentPos) {
 
 function MyUser_GetColor() {
 
-    var myColor = 'Black';
+    var myColor = 'Observador';
 
     var itemuser = jQuery.parseJSON(userInfo);
     var game = jQuery.parseJSON(gameInfo);
-
-
     
-
     if (itemuser.userId == game.player1Id) myColor = 'White';
+    if (itemuser.userId == game.player2Id) myColor = 'Black';
 
-    $("#DebugJs").html("CurrentColor " + myColor);
+   // Setting Global Turns
+   PlayerCurrentID = itemuser.userId;
 
-    
+    $("#DebugJs").html("Current Turn " + myColor);
+
     return myColor;
     
 }

@@ -1,30 +1,14 @@
 <div class="row">
-  <div id="fb-root"></div>
-  <script>
-    window.fbAsyncInit = function() {
-    // init the FB JS SDK
-    FB.init({
-    appId      : '107968099362923', // App ID from the App Dashboard
-    channelUrl : '//localhost:9292//channel.html', // Channel File for x-domain communication
-    status     : true, // check the login status upon init?
-    cookie     : true, // set sessions cookies to allow your server to access the session?
-    xfbml      : true  // parse XFBML tags on this page?
-    });
 
-    // Additional initialization code such as adding Event Listeners goes here
 
-    };
-
-    // Load the SDK's source Asynchronously
-    (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=386008508137576";
-    fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
-
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=386008508137576";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
   <div class="span12">
     <script language="javascript" type="text/javascript">
@@ -45,25 +29,26 @@
         <div class="PlayerBox1">
           <% @graphuser = Koala::Facebook::API.new(@userInfo.token) %>
           <div class="PlayerBox1_img">
-            <img src="<%= @graphuser.get_picture('me') %>" />
-            </br>
             <%= @userInfo.name %>
+            </br>
+            <img src="<%= @graphuser.get_picture('me') %>" />
+            
+            
           </div>
 
           <div class="PlayerBox2_img">  
+            
+            <%= @challenger.name %>
+            </br>
             <% @fbapichallenger = Koala::Facebook::API.new(@challenger.token) %>         
             <img src="<%= @fbapichallenger.get_picture('me') %>" class="PlayerBox2_img" />
-            </br>
-            <%= @challenger.name %>
+            
           </div>
         </div>
+        <div class="fb-comments" data-href="http://fb-chess.herokuapp.com/" data-num-posts="5" data-width="470"></div>
 
-        <div class="fb-comments" data-href="<%= @game.url %>" data-num-posts="5" data-width="300">
-        </div>
-
-	<div id="IsDebug" style="Display:none">
+      <div id="IsDebug" style="Display:none">
         <div id="DebugJs" name="DebugJs"></div>
-
         Debug
         <br />
         <input type="text" id="DebugText" name="DebugText" class="DebugInfo" />

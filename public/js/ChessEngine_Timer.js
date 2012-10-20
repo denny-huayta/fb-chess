@@ -79,21 +79,39 @@ function ParseMoves(html) {
 
 function ParseJS(html) {
 
+
+    var item = jQuery.parseJSON(html);
+
+    // Error Warning
     if (html == "ERROR") {
         $("#DebugJs").html("Error");
         return;
     }
 
-    var item = jQuery.parseJSON(html);
 
-    var itemuser = jQuery.parseJSON(userInfo);
+    // Show Board as PlayerCurrentColor = Observador
+    if (PlayerCurrentColor == 'Observador')
+    {
+        // Observador Finish Game
+        if (item.status == "Finished")
+        {
+            ShowMessage("Checkmate!", item.winner + " wins the chess game", "Warning");
+            GameIsFinish = true;
+            return;
+        }
 
-   // $("#DebugJs").html("CurrentTurn " + item.currentPlayerId + "<br> Current " + itemuser.userId);
+        ShowMessage("Visitor", " This is a realtime game", "success");
+        NetConnect_GetBoard();
+        return;
+    }
 
+   // Setting Global Turns
+   CurrentTurnPlayerID = item.currentPlayerId;
 
+   // Fishing Game
     if (item.status == "Finished")
     {
-    	if (item.winnerId == itemuser.userId)
+    	if (item.winnerId == PlayerCurrentID)
     	{
     		ShowMessage("Congratulation, you win!", item.winner + " wins the chess game", "success");
     	}
@@ -108,10 +126,12 @@ function ParseJS(html) {
     }
  
     // Mostrar Warning Turno
-    if (item.currentPlayerId == itemuser.userId) {
+    if (item.currentPlayerId == PlayerCurrentID) {
 
         if (PopupVisible == false) {
-            $("#AlertBox").show("slow");
+            
+            ShowMessage("Play!", "  It's your turn, use your best strategy. (" + PlayerCurrentColor + ")", "block");
+
             PopupVisible = true;
             NetConnect_GetBoard();
         }
@@ -119,12 +139,11 @@ function ParseJS(html) {
     else {
 
         if (PopupVisible == true) {
-            $("#AlertBox").hide("slow");
+            HideMessage();
             PopupVisible = false;
             NetConnect_GetBoard();
         }
     }
-
 
 }
 function NetConnect_SendMove(piece,source, target) {
@@ -171,3 +190,10 @@ function ShowMessage(ptitle, pmessage, ptype)
   
        NetConnect();
  });
+
+function HideMessage()
+{
+
+    $("#AlertBox").hide("slow");
+
+}

@@ -1,1 +1,0 @@
-ruby -rubygems application.rb

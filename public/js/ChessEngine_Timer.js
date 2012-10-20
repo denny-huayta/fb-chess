@@ -138,7 +138,6 @@ function NetConnect_SendMove(piece,source, target) {
     //Debug
     //$.ajax({ url: purl, cache: false }).done(function (html) { $("#DebugJs").html("send " + piece); });
     $.ajax({ url: purl, cache: false }).done(function (html) { PrintDebug("send " + piece + " O=" +source + " F=" +target); });
-
     
 }
 
@@ -149,7 +148,7 @@ function PrintStatus(value) {
 }
 
 //NetConnect();
-window.setInterval(NetConnect, 2000);
+window.setInterval(NetConnect, 8000);
 
 
 function ShowMessage(ptitle, pmessage, ptype)
@@ -167,3 +166,8 @@ function ShowMessage(ptitle, pmessage, ptype)
 	
 	$("#AlertBox").show("slow");
 }
+
+ $(document).ready(function() {
+  
+       NetConnect();
+ });

@@ -84,26 +84,52 @@ function Rule(player, start) {
 
 function Rule_WhitePawn(paramCurrentX, paramCurrentY) {
     CurrentX = paramCurrentX;
-    CurrentY = paramCurrentY;
+    CurrentY = parseInt(paramCurrentY);
+    contador = 0;
 
     FirstFriend = false;
 
     // Fist Pawn Move
     CurrentY++;
 
-    FirstFriend = !RuleIsValidPos("White", look123[CurrentX] + CurrentY);
+    FirstFriend = !RuleIsValidPos("White", look123[CurrentX] + CurrentY) || !RuleIsValidPos("Black", look123[CurrentX] + CurrentY);
 
-    if (IsInBoard(look123[CurrentX], CurrentY) && !FirstFriend) {
-        RuleValidMoves[0] = look123[CurrentX] + CurrentY;
+    if (IsInBoard(look123[CurrentX], CurrentY) && !FirstFriend ) {
+        RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
+        contador++;
     }
     
     // Second Pawn Move
 
     if (paramCurrentY == 2 && !FirstFriend) {
         CurrentY++;
-        if (IsInBoard(look123[CurrentX], CurrentY) && RuleIsValidPos("White", look123[CurrentX] + CurrentY)) {
-            RuleValidMoves[1] = look123[CurrentX] + CurrentY;
+        if (IsInBoard(look123[CurrentX], CurrentY) && RuleIsValidPos("White", look123[CurrentX] + CurrentY)  && RuleIsValidPos("Black", look123[CurrentX] + CurrentY)) {
+            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
+            contador++;
         }
+    }
+    
+    // Enemy in range 9
+    CurrentX = parseInt(paramCurrentX) + 1;
+    CurrentY = parseInt(paramCurrentY) + 1;
+
+    if (!RuleIsValidPos("Black", look123[CurrentX] + CurrentY))
+    {
+     RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
+     contador++;
+     
+     PrintDebug('Valid Pos ' + look123[CurrentX] + ' ' + CurrentY + ' b='  + board[look123[CurrentX] + CurrentY] + ' V=' + board[look123[CurrentX] + CurrentY].indexOf("White", 0) );
+     
+    }
+    
+    // Enemy in range 7
+        CurrentX = parseInt(paramCurrentX) - 1;
+        CurrentY = parseInt(paramCurrentY) + 1;
+    
+    if (!RuleIsValidPos("Black", look123[CurrentX] + CurrentY))
+    {
+         RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
+         contador++;
     }
 
     return;
@@ -112,13 +138,14 @@ function Rule_WhitePawn(paramCurrentX, paramCurrentY) {
 function Rule_BlackPawn(paramCurrentX, paramCurrentY) {
     CurrentX = paramCurrentX;
     CurrentY = paramCurrentY;
-
+    contador = 0;
     CurrentY--;
 
-    FirstFriend = !RuleIsValidPos("Black", look123[CurrentX] + CurrentY);
+    FirstFriend = !RuleIsValidPos("Black", look123[CurrentX] + CurrentY) || !RuleIsValidPos("White", look123[CurrentX] + CurrentY);
 
     if (IsInBoard(look123[CurrentX], CurrentY) && !FirstFriend) {
-        RuleValidMoves[0] = look123[CurrentX] + CurrentY;
+        RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
+        contador++;
     }
     
     // Second Pawn Move
@@ -126,9 +153,32 @@ function Rule_BlackPawn(paramCurrentX, paramCurrentY) {
     if (paramCurrentY == 7 && !FirstFriend) {
         CurrentY--;
         if (IsInBoard(look123[CurrentX], CurrentY) && RuleIsValidPos("Black", look123[CurrentX] + CurrentY)) {
-            RuleValidMoves[1] = look123[CurrentX] + CurrentY;
+            RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
+            contador++;
         }
     }
+
+ // Enemy in range 3
+    CurrentX = parseInt(paramCurrentX) - 1;
+    CurrentY = parseInt(paramCurrentY) - 1;
+
+    if (!RuleIsValidPos("White", look123[CurrentX] + CurrentY))
+    {
+     RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
+     contador++;
+      
+    }
+    
+    // Enemy in range 1
+        CurrentX = parseInt(paramCurrentX) + 1;
+        CurrentY = parseInt(paramCurrentY) - 1;
+    
+    if (!RuleIsValidPos("White", look123[CurrentX] + CurrentY))
+    {
+         RuleValidMoves[contador] = look123[CurrentX] + CurrentY;
+         contador++;
+    }
+
 
     return;
 }

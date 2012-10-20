@@ -61,6 +61,7 @@
         <div class="fb-comments" data-href="<%= @game.url %>" data-num-posts="5" data-width="300">
         </div>
 
+        <div style="display:none">
         <div id="DebugJs" name="DebugJs"></div>
 
         Debug
@@ -71,117 +72,118 @@
         <input type="text" id="DebugText2" name="DebugText2" class="DebugInfo" />
 
 
-        <input type="button" onclick='javascript:$("#AlertBox").toggle("slow");return'></input>
+        <input type="button" onclick='javascript:ShowMessage("title","message","success");return'></input>
+        </div>
       </div>
     </div>
     <div class="ChessBoard">
 
       <div class="alert" style='display:none' id='AlertBox' name='AlertBox'>
         <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>Play!</strong> It's your turn, use your best strategy.
+        <strong class='AlertBoxTitle'>Play!</strong> <span class='AlertBoxMessage'>It's your turn, use your best strategy.</span>
       </div>
 
       <div class="BaseLine">
 
-        <div id="A8" draggable='true' class='BaseBox ColorW BlackTower'></div>
-        <div id="B8" draggable='true' class='BaseBox ColorB BlackHorse'></div>
-        <div id="C8" draggable='true' class='BaseBox ColorW BlackBishop'></div>
-        <div id="D8" draggable='true' class='BaseBox ColorB BlackQueen'></div>
-        <div id="E8" draggable='true' class='BaseBox ColorW BlackKing'></div>
-        <div id="F8" draggable='true' class='BaseBox ColorB BlackBishop'></div>
-        <div id="G8" draggable='true' class='BaseBox ColorW BlackHorse'></div>
-        <div id="H8" draggable='true' class='BaseBox ColorB BlackTower'></div>
-
-      </div>
-
-      <div class="BaseLine">
-
-        <div id="A7" draggable='true' class='BaseBox ColorB BlackPawn'></div>
-        <div id="B7" draggable='true' class='BaseBox ColorW BlackPawn'></div>
-        <div id="C7" draggable='true' class='BaseBox ColorB BlackPawn'></div>
-        <div id="D7" draggable='true' class='BaseBox ColorW BlackPawn'></div>
-        <div id="E7" draggable='true' class='BaseBox ColorB BlackPawn'></div>
-        <div id="F7" draggable='true' class='BaseBox ColorW BlackPawn'></div>
-        <div id="G7" draggable='true' class='BaseBox ColorB BlackPawn'></div>
-        <div id="H7" draggable='true' class='BaseBox ColorW BlackPawn'></div>
+        <div id="A8" draggable='true' class='BaseBox ColorW'></div>
+        <div id="B8" draggable='true' class='BaseBox ColorB'></div>
+        <div id="C8" draggable='true' class='BaseBox ColorW'></div>
+        <div id="D8" draggable='true' class='BaseBox ColorB'></div>
+        <div id="E8" draggable='true' class='BaseBox ColorW'></div>
+        <div id="F8" draggable='true' class='BaseBox ColorB'></div>
+        <div id="G8" draggable='true' class='BaseBox ColorW'></div>
+        <div id="H8" draggable='true' class='BaseBox ColorB'></div>
 
       </div>
 
       <div class="BaseLine">
 
-        <div id="A6" draggable='true' class='BaseBox ColorW '></div>
-        <div id="B6" draggable='true' class='BaseBox ColorB '></div>
-        <div id="C6" draggable='true' class='BaseBox ColorW '></div>
-        <div id="D6" draggable='true' class='BaseBox ColorB '></div>
-        <div id="E6" draggable='true' class='BaseBox ColorW '></div>
-        <div id="F6" draggable='true' class='BaseBox ColorB '></div>
-        <div id="G6" draggable='true' class='BaseBox ColorW '></div>
-        <div id="H6" draggable='true' class='BaseBox ColorB '></div>
+        <div id="A7" draggable='true' class='BaseBox ColorB'></div>
+        <div id="B7" draggable='true' class='BaseBox ColorW'></div>
+        <div id="C7" draggable='true' class='BaseBox ColorB'></div>
+        <div id="D7" draggable='true' class='BaseBox ColorW'></div>
+        <div id="E7" draggable='true' class='BaseBox ColorB'></div>
+        <div id="F7" draggable='true' class='BaseBox ColorW'></div>
+        <div id="G7" draggable='true' class='BaseBox ColorB'></div>
+        <div id="H7" draggable='true' class='BaseBox ColorW'></div>
 
       </div>
 
       <div class="BaseLine">
 
-        <div id="A5" draggable='true' class='BaseBox ColorB '></div>
-        <div id="B5" draggable='true' class='BaseBox ColorW '></div>
-        <div id="C5" draggable='true' class='BaseBox ColorB '></div>
-        <div id="D5" draggable='true' class='BaseBox ColorW '></div>
-        <div id="E5" draggable='true' class='BaseBox ColorB '></div>
-        <div id="F5" draggable='true' class='BaseBox ColorW '></div>
-        <div id="G5" draggable='true' class='BaseBox ColorB '></div>
-        <div id="H5" draggable='true' class='BaseBox ColorW '></div>
+        <div id="A6" draggable='true' class='BaseBox ColorW'></div>
+        <div id="B6" draggable='true' class='BaseBox ColorB'></div>
+        <div id="C6" draggable='true' class='BaseBox ColorW'></div>
+        <div id="D6" draggable='true' class='BaseBox ColorB'></div>
+        <div id="E6" draggable='true' class='BaseBox ColorW'></div>
+        <div id="F6" draggable='true' class='BaseBox ColorB'></div>
+        <div id="G6" draggable='true' class='BaseBox ColorW'></div>
+        <div id="H6" draggable='true' class='BaseBox ColorB'></div>
 
       </div>
 
       <div class="BaseLine">
 
-        <div id="A4" draggable='true' class='BaseBox ColorW '></div>
-        <div id="B4" draggable='true' class='BaseBox ColorB '></div>
-        <div id="C4" draggable='true' class='BaseBox ColorW '></div>
-        <div id="D4" draggable='true' class='BaseBox ColorB '></div>
-        <div id="E4" draggable='true' class='BaseBox ColorW '></div>
-        <div id="F4" draggable='true' class='BaseBox ColorB '></div>
-        <div id="G4" draggable='true' class='BaseBox ColorW '></div>
-        <div id="H4" draggable='true' class='BaseBox ColorB '></div>
+        <div id="A5" draggable='true' class='BaseBox ColorB'></div>
+        <div id="B5" draggable='true' class='BaseBox ColorW'></div>
+        <div id="C5" draggable='true' class='BaseBox ColorB'></div>
+        <div id="D5" draggable='true' class='BaseBox ColorW'></div>
+        <div id="E5" draggable='true' class='BaseBox ColorB'></div>
+        <div id="F5" draggable='true' class='BaseBox ColorW'></div>
+        <div id="G5" draggable='true' class='BaseBox ColorB'></div>
+        <div id="H5" draggable='true' class='BaseBox ColorW'></div>
 
       </div>
 
       <div class="BaseLine">
 
-        <div id="A3" draggable='true' class='BaseBox ColorB '></div>
-        <div id="B3" draggable='true' class='BaseBox ColorW '></div>
-        <div id="C3" draggable='true' class='BaseBox ColorB '></div>
-        <div id="D3" draggable='true' class='BaseBox ColorW '></div>
-        <div id="E3" draggable='true' class='BaseBox ColorB '></div>
-        <div id="F3" draggable='true' class='BaseBox ColorW '></div>
-        <div id="G3" draggable='true' class='BaseBox ColorB '></div>
-        <div id="H3" draggable='true' class='BaseBox ColorW '></div>
+        <div id="A4" draggable='true' class='BaseBox ColorW'></div>
+        <div id="B4" draggable='true' class='BaseBox ColorB'></div>
+        <div id="C4" draggable='true' class='BaseBox ColorW'></div>
+        <div id="D4" draggable='true' class='BaseBox ColorB'></div>
+        <div id="E4" draggable='true' class='BaseBox ColorW'></div>
+        <div id="F4" draggable='true' class='BaseBox ColorB'></div>
+        <div id="G4" draggable='true' class='BaseBox ColorW'></div>
+        <div id="H4" draggable='true' class='BaseBox ColorB'></div>
 
       </div>
 
       <div class="BaseLine">
 
-        <div id="A2" draggable='true' class='BaseBox ColorW WhitePawn'></div>
-        <div id="B2" draggable='true' class='BaseBox ColorB WhitePawn'></div>
-        <div id="C2" draggable='true' class='BaseBox ColorW WhitePawn'></div>
-        <div id="D2" draggable='true' class='BaseBox ColorB WhitePawn'></div>
-        <div id="E2" draggable='true' class='BaseBox ColorW WhitePawn'></div>
-        <div id="F2" draggable='true' class='BaseBox ColorB WhitePawn'></div>
-        <div id="G2" draggable='true' class='BaseBox ColorW WhitePawn'></div>
-        <div id="H2" draggable='true' class='BaseBox ColorB WhitePawn'></div>
+        <div id="A3" draggable='true' class='BaseBox ColorB'></div>
+        <div id="B3" draggable='true' class='BaseBox ColorW'></div>
+        <div id="C3" draggable='true' class='BaseBox ColorB'></div>
+        <div id="D3" draggable='true' class='BaseBox ColorW'></div>
+        <div id="E3" draggable='true' class='BaseBox ColorB'></div>
+        <div id="F3" draggable='true' class='BaseBox ColorW'></div>
+        <div id="G3" draggable='true' class='BaseBox ColorB'></div>
+        <div id="H3" draggable='true' class='BaseBox ColorW'></div>
+
+      </div>
+
+      <div class="BaseLine">
+
+        <div id="A2" draggable='true' class='BaseBox ColorW'></div>
+        <div id="B2" draggable='true' class='BaseBox ColorB'></div>
+        <div id="C2" draggable='true' class='BaseBox ColorW'></div>
+        <div id="D2" draggable='true' class='BaseBox ColorB'></div>
+        <div id="E2" draggable='true' class='BaseBox ColorW'></div>
+        <div id="F2" draggable='true' class='BaseBox ColorB'></div>
+        <div id="G2" draggable='true' class='BaseBox ColorW'></div>
+        <div id="H2" draggable='true' class='BaseBox ColorB'></div>
 
       </div>
 
       <div class="BaseLine BaseLineBottom">
 
-        <div id="A1" draggable='true' class='BaseBox ColorB WhiteTower'></div>
-        <div id="B1" draggable='true' class='BaseBox ColorW WhiteHorse'></div>
-        <div id="C1" draggable='true' class='BaseBox ColorB WhiteBishop'></div>
-        <div id="D1" draggable='true' class='BaseBox ColorW WhiteQueen'></div>
-        <div id="E1" draggable='true' class='BaseBox ColorB WhiteKing'></div>
-        <div id="F1" draggable='true' class='BaseBox ColorW WhiteBishop'></div>
-        <div id="G1" draggable='true' class='BaseBox ColorB WhiteHorse'></div>
-        <div id="H1" draggable='true' class='BaseBox ColorW WhiteTower'></div>
+        <div id="A1" draggable='true' class='BaseBox ColorB'></div>
+        <div id="B1" draggable='true' class='BaseBox ColorW'></div>
+        <div id="C1" draggable='true' class='BaseBox ColorB'></div>
+        <div id="D1" draggable='true' class='BaseBox ColorW'></div>
+        <div id="E1" draggable='true' class='BaseBox ColorB'></div>
+        <div id="F1" draggable='true' class='BaseBox ColorW'></div>
+        <div id="G1" draggable='true' class='BaseBox ColorB'></div>
+        <div id="H1" draggable='true' class='BaseBox ColorW'></div>
       </div>
     </div>
 

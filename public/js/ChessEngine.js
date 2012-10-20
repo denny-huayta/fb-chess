@@ -41,6 +41,13 @@ function handleDragStart(e) {
 
     dragSrcEl = null;
 
+    if (GameIsFinish)
+    {
+     	PrintDebug('Partida terminada');
+     	e.cancel = true;
+        return;
+    }
+
     // No item
     if (board[this.id] == '') {
         PrintDebug('No es una ficha');
@@ -148,6 +155,37 @@ var cols = document.querySelectorAll('.BaseBox');
 function InitBoard() {
     board =
     {
+        'A8': '', 'B8': '', 'C8': '', 'D8': '', 'E8': '', 'F8': '', 'G8': '', 'H8': '',
+        'A7': '', 'B7': '', 'C7': '', 'D7': '', 'E7': '', 'F7': '', 'G7': '', 'H7': '',
+        'A6': '', 'B6': '', 'C6': '', 'D6': '', 'E6': '', 'F6': '', 'G6': '', 'H6': '',
+        'A5': '', 'B5': '', 'C5': '', 'D5': '', 'E5': '', 'F5': '', 'G5': '', 'H5': '',
+        'A4': '', 'B4': '', 'C4': '', 'D4': '', 'E4': '', 'F4': '', 'G4': '', 'H4': '',
+        'A3': '', 'B3': '', 'C3': '', 'D3': '', 'E3': '', 'F3': '', 'G3': '', 'H3': '',
+        'A2': '', 'B2': '', 'C2': '', 'D2': '', 'E2': '', 'F2': '', 'G2': '', 'H2': '',
+        'A1': '', 'B1': '', 'C1': '', 'D1': '', 'E1': '', 'F1': '', 'G1': '', 'H1': ''
+    };
+
+    boardcolor =
+    {
+        'A8': 'W', 'B8': 'B', 'C8': 'W', 'D8': 'B', 'E8': 'W', 'F8': 'B', 'G8': 'W', 'H8': 'B',
+        'A7': 'B', 'B7': 'W', 'C7': 'B', 'D7': 'W', 'E7': 'B', 'F7': 'W', 'G7': 'B', 'H7': 'W',
+        'A6': 'W', 'B6': 'B', 'C6': 'W', 'D6': 'B', 'E6': 'W', 'F6': 'B', 'G6': 'W', 'H6': 'B',
+        'A5': 'B', 'B5': 'W', 'C5': 'B', 'D5': 'W', 'E5': 'B', 'F5': 'W', 'G5': 'B', 'H5': 'W',
+        'A4': 'W', 'B4': 'B', 'C4': 'W', 'D4': 'B', 'E4': 'W', 'F4': 'B', 'G4': 'W', 'H4': 'B',
+        'A3': 'B', 'B3': 'W', 'C3': 'B', 'D3': 'W', 'E3': 'B', 'F3': 'W', 'G3': 'B', 'H3': 'W',
+        'A2': 'W', 'B2': 'B', 'C2': 'W', 'D2': 'B', 'E2': 'W', 'F2': 'B', 'G2': 'W', 'H2': 'B',
+        'A1': 'B', 'B1': 'W', 'C1': 'B', 'D1': 'W', 'E1': 'B', 'F1': 'W', 'G1': 'B', 'H1': 'W'
+    };
+    
+    for (var item in board) {
+        //alert(item + " " + board[item]);
+        //jQuery("#" + item).addClass(board[item]); ;
+    }
+}
+
+function xInitBoardOLD() {
+    xboard =
+    {
         'A8': 'BlackTower', 'B8': 'BlackHorse', 'C8': 'BlackBishop', 'D8': 'BlackQueen', 'E8': 'BlackKing', 'F8': 'BlackBishop', 'G8': 'BlackHorse', 'H8': 'BlackTower',
         'A7': 'BlackPawn', 'B7': 'BlackPawn', 'C7': 'BlackPawn', 'D7': 'BlackPawn', 'E7': 'BlackPawn', 'F7': 'BlackPawn', 'G7': 'BlackPawn', 'H7': 'BlackPawn',
         'A6': '', 'B6': '', 'C6': '', 'D6': '', 'E6': '', 'F6': '', 'G6': '', 'H6': '',
@@ -158,7 +196,7 @@ function InitBoard() {
         'A1': 'WhiteTower', 'B1': 'WhiteHorse', 'C1': 'WhiteBishop', 'D1': 'WhiteQueen', 'E1': 'WhiteKing', 'F1': 'WhiteBishop', 'G1': 'WhiteHorse', 'H1': 'WhiteTower'
     };
 
-    boardcolor =
+    xboardcolor =
     {
         'A8': 'W', 'B8': 'B', 'C8': 'W', 'D8': 'B', 'E8': 'W', 'F8': 'B', 'G8': 'W', 'H8': 'B',
         'A7': 'B', 'B7': 'W', 'C7': 'B', 'D7': 'W', 'E7': 'B', 'F7': 'W', 'G7': 'B', 'H7': 'W',

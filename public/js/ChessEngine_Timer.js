@@ -1,8 +1,11 @@
 var PopupVisible = false;
 var FirsLoad = true;
+var GameIsFinish = false;
 
 // Every 5 Seconds check the status
 function NetConnect() {
+    
+    if (GameIsFinish) return;
     
     var objDate = new Date();
     var texto = objDate.getTime();//  + " GameID " + game.gameId;
@@ -88,6 +91,22 @@ function ParseJS(html) {
    // $("#DebugJs").html("CurrentTurn " + item.currentPlayerId + "<br> Current " + itemuser.userId);
 
 
+    if (item.status == "Finished")
+    {
+    	if (item.winnerId == itemuser.userId)
+    	{
+    		ShowMessage("Congratulation, you win!", item.winner + " wins the chess game", "success");
+    	}
+    	else
+    	{
+    		ShowMessage("Uuh! you lose", item.winner + " wins the chess game", "error");
+    		
+    	}
+    	
+    	GameIsFinish = true;
+    return;
+    }
+ 
     // Mostrar Warning Turno
     if (item.currentPlayerId == itemuser.userId) {
 
@@ -132,3 +151,19 @@ function PrintStatus(value) {
 //NetConnect();
 window.setInterval(NetConnect, 2000);
 
+
+function ShowMessage(ptitle, pmessage, ptype)
+{
+//Warning block
+//error   error
+//success success
+//info    info
+
+	$(".AlertBoxTitle").html(ptitle);
+	$(".AlertBoxMessage").html(pmessage);
+	
+	document.getElementById("AlertBox").className="alert alert-" + ptype;
+	
+	
+	$("#AlertBox").show("slow");
+}

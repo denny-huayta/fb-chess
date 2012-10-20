@@ -11,7 +11,7 @@
 
 .ChessBoard
 {
-float:left;
+float:right;
 }
 
 .ColorB
@@ -174,4 +174,13 @@ text-align:left;
 float:right;
 
 text-align:right;
+}
+
+
+footer
+{
+clear:both;
+width:100%;
+text-align:center;
+margin-top:20px;
 }

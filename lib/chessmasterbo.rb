@@ -39,8 +39,8 @@ class Chessmasterbo
 		game.player1Email		= userInfo['email']
 		game.creationDate		= Time.now.to_s
 		game.status				= 'New'
-		#game.url     			= 'http://fb-chess.herokuapp.com/see?gameId=' +  game.gameId
-		game.url     			= 'http://localhost:9292/see?gameId=' +  game.gameId		
+		game.url     			= 'http://fb-chess.herokuapp.com/see?gameId=' +  game.gameId
+		#game.url     			= 'http://localhost:9292/see?gameId=' +  game.gameId		
 		game.save
 
 		return game

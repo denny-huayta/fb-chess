@@ -14,13 +14,13 @@ require_relative 'chessmasterbo'
 require_relative 'chessuser'
 
 # register your app at facebook to get those infos
-#APP_ID = 386008508137576 # your app id
-#APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
-#SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
+APP_ID = 386008508137576 # your app id
+APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
+SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
 
-APP_ID = 107968099362923 # your app id
-APP_CODE = '2ee22141b401f2aa98bbee0865ed21a3' # your app code
-SITE_URL = 'http://localhost:9292/'  # your app site url
+#APP_ID = 107968099362923 # your app id
+#APP_CODE = '2ee22141b401f2aa98bbee0865ed21a3' # your app code
+#SITE_URL = 'http://localhost:9292/'  # your app site url
 
 
 class CHESSMASTER < Sinatra::Application
@@ -33,13 +33,13 @@ class CHESSMASTER < Sinatra::Application
 	chessmasterbo = Chessmasterbo.new
 
 	# Mongo Mapper Connection
-	MongoMapper.connection = Mongo::Connection.new('localhost',27017, :pool_size => 5, :timeout => 5)
-	MongoMapper.database = 'mydb'
+	# MongoMapper.connection = Mongo::Connection.new('localhost',27017, :pool_size => 5, :timeout => 5)
+	# MongoMapper.database = 'mydb'
 
-	#db = URI.parse(ENV['MONGOHQ_URL']) 	
- 	#MongoMapper.connection  = Mongo::Connection.new(db.host, db.port)
- 	#MongoMapper.database = 'app8043150'
- 	#MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
+	db = URI.parse(ENV['MONGOHQ_URL']) 	
+ 	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port)
+ 	MongoMapper.database = 'app8043150'
+ 	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
 
 	get '/' do
 
@@ -95,7 +95,7 @@ class CHESSMASTER < Sinatra::Application
 			game = chessmasterbo.newgame(userInfo)
 			chessmasterbo.loadchessboardwhite(game.gameId, userInfo)
 			# publish Facebook
-			#chessmasterbo.putwallpost(session["access_token"], game.player1 + " has created a chess game.! " + game.url)
+			chessmasterbo.putwallpost(session["access_token"], game.player1 + " has created a chess game.! " + game.url)
 			redirect '/games'
 		else
   			redirect '/login'

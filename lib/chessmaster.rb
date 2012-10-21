@@ -14,7 +14,7 @@ require_relative 'chessmasterbo'
 require_relative 'chessuser'
 
 # register your app at facebook to get those infos
-SITE_URL 	= 'http://localhost:9292/' #'http://fb-chess.herokuapp.com/' # your app site url
+SITE_URL 	= 'http://fb-chess.herokuapp.com/' # 'http://localhost:9292/'  your app site url
 APP_ID		= 386008508137576 # your app id
 APP_CODE 	= '1fcec4d0014d0dd766c12bd54a65e27b' # your app code		
 DATABASE 	= 'app8043150'

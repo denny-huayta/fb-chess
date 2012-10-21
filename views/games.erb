@@ -8,12 +8,6 @@
 			<p>
 				<a class="btn btn-success" href="/new" method="post">New Game</a>				
 			</p>
-			<!--
-			<div class="alert">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>Warning!</strong> You can not challenge yourself.
-			</div>
-			-->			
 			<table class="table table-striped table-bordered table-hover"> <!-- table-striped  .table-condensed -->				
 				<thead>
 					<tr>
@@ -64,8 +58,10 @@
 						</td>						
 						<td>
 							<% if game.player1Id != @user_info['id'] %>	
+							<% if game.player2.nil?  %>	
 							<a href="/challenge?gameId=<%=game.gameId%>" class="btn" method="post">Play</a>
-							<% end %>							
+							<% end %>
+							<% end %>						
 						</td>
 						<td> <%= game.status %>
 						</td>

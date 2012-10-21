@@ -14,14 +14,10 @@ require_relative 'chessmasterbo'
 require_relative 'chessuser'
 
 # register your app at facebook to get those infos
-APP_ID = 386008508137576 # your app id
-APP_CODE = '1fcec4d0014d0dd766c12bd54a65e27b' # your app code
-SITE_URL = 'http://fb-chess.herokuapp.com/' # your app site url
-
-#APP_ID = 107968099362923 # your app id
-#APP_CODE = '2ee22141b401f2aa98bbee0865ed21a3' # your app code
-#SITE_URL = 'http://localhost:9292/'  # your app site url
-
+SITE_URL 	= 'http://localhost:9292/' #'http://fb-chess.herokuapp.com/' # your app site url
+APP_ID		= 386008508137576 # your app id
+APP_CODE 	= '1fcec4d0014d0dd766c12bd54a65e27b' # your app code		
+DATABASE 	= 'app8043150'
 
 class CHESSMASTER < Sinatra::Application
 	
@@ -32,14 +28,20 @@ class CHESSMASTER < Sinatra::Application
 
 	chessmasterbo = Chessmasterbo.new
 
-	# Mongo Mapper Connection
-	# MongoMapper.connection = Mongo::Connection.new('localhost',27017, :pool_size => 5, :timeout => 5)
-	# MongoMapper.database = 'mydb'
+	if SITE_URL == 'http://localhost:9292/'
+		APP_ID				= 107968099362923 # your app id		
+		APP_CODE 			= '2ee22141b401f2aa98bbee0865ed21a3' # your app code
+		ENV['MONGOHQ_URL'] 	= 'http://localhost:27017'
+	end
 
-	db = URI.parse(ENV['MONGOHQ_URL']) 	
+	db = URI.parse(ENV['MONGOHQ_URL']) 
  	MongoMapper.connection  = Mongo::Connection.new(db.host, db.port)
- 	MongoMapper.database = 'app8043150'
+ 	MongoMapper.database = DATABASE
  	MongoMapper.database.authenticate(db.user, db.password) unless (db.user.nil? || db.user.nil?)
+
+ 	get '/geturl' do 
+ 		return SITE_URL + ' ' + ENV['MONGOHQ_URL'] + ' - ' + APP_ROOT
+ 	end
 
 	get '/' do
 
@@ -47,10 +49,8 @@ class CHESSMASTER < Sinatra::Application
 
 			@api = Koala::Facebook::API.new(session[:access_token])
 			@user_info = @api.get_object("me")
-
 			session['userInfo'] = @user_info
 			chessmasterbo.verifyuser(@user_info, session[:access_token])
-
 			erb :index
 		else
 			erb :index

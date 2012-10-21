@@ -14,14 +14,16 @@ class Chessmasterbo
 		userId 	= userInfo['id']
 		usr 	= ChessUser.where(:userId => userId).first
 		if usr.nil?
-			
+			graphuser = Koala::Facebook::API.new(token)
 			user = ChessUser.new
+
 			user.userId				= userInfo['id']
 			user.name 				= userInfo['name']		
 			user.userName			= userInfo['username']
 			user.email				= userInfo['email']
 			user.token				= token
 			user.creationDate		= Time.now.to_s
+			user.urlPicture			= graphuser.get_picture('me')
 			user.save
 		end		
 	end
@@ -39,8 +41,7 @@ class Chessmasterbo
 		game.player1Email		= userInfo['email']
 		game.creationDate		= Time.now.to_s
 		game.status				= 'New'
-		game.url     			= 'http://fb-chess.herokuapp.com/see?gameId=' +  game.gameId
-		#game.url     			= 'http://localhost:9292/see?gameId=' +  game.gameId		
+		game.url     			= SITE_URL + 'see?gameId=' +  game.gameId		
 		game.save
 
 		return game

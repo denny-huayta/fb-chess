@@ -1,11 +1,9 @@
 
 <div class="hero-unit">
-	<h1>FB-Chessmaster</h1>
+	<h1>FB-Chess</h1>
 	<p>Play chess online! online chess battleground</p>  
 	<% if session[:access_token] %>
 		<p>
-		  	<% @api = Koala::Facebook::API.new(session[:access_token]) %>	  
-		  	<% @user_info = @api.get_object("me") %>
 		  	Welcome <%= @user_info['name'] %>.
 		</p>
 		<p>

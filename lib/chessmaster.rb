@@ -12,11 +12,11 @@ require_relative 'game'
 require_relative 'chessboard'
 require_relative 'chessmasterbo'
 require_relative 'chessuser'
-require_relative 'chessuserHistory'
+require_relative 'chessboardHistory'
 
 # register your app at facebook to get those infos
-SITE_URL 	= 'http://fb-chess.herokuapp.com/' # 
-#SITE_URL 	= 'http://localhost:9292/'  # your app site url
+#SITE_URL 	= 'http://fb-chess.herokuapp.com/' # 
+SITE_URL 	= 'http://localhost:9292/'  # your app site url
 APP_ID		= 386008508137576 # your app id
 APP_CODE 	= '1fcec4d0014d0dd766c12bd54a65e27b' # your app code		
 DATABASE 	= 'app8043150'

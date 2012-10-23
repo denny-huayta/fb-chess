@@ -14,7 +14,5 @@ class ChessboardHistory
 	key :origin,			String
 	key :final,				String
 	key :lastModified,		String	
-	# validations
-	# validates_presence_of :gameId, :player1
 
 end

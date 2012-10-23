@@ -159,15 +159,15 @@ class Chessmasterbo
 						:playOrder		=> orderx
 					)
 				
-				history = ChessboardHistory.new
+				hist = ChessboardHistory.new
 
-				history.gameId 		= game.gameId
-				history.order 		= orderx
-				history.piece 		= game.piece
-				history.origin 		= game.origin
-				history.final 		= game.final
-				history.lastModified = Time.now.to_s
-				history.save
+				hist.gameId 		= game.gameId
+				hist.order 			= orderx
+				hist.piece 			= game.piece
+				hist.origin 		= game.origin
+				hist.final 			= game.final
+				hist.lastModified 	= Time.now.to_s
+				hist.save
 
 				# Update piece with final position
 				piece1.update_attributes(

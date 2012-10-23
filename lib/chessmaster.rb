@@ -12,6 +12,7 @@ require_relative 'game'
 require_relative 'chessboard'
 require_relative 'chessmasterbo'
 require_relative 'chessuser'
+require_relative 'chessuserHistory'
 
 # register your app at facebook to get those infos
 SITE_URL 	= 'http://fb-chess.herokuapp.com/' # 

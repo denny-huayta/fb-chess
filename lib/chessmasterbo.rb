@@ -148,7 +148,7 @@ class Chessmasterbo
 				end
 				
 				orderx = game.playOrder + 1
-				# Update game status and winner 				
+				# Update game status and winner
 				game.update_attributes(						
 						:winner 		=> winner,
 						:winnerId 		=> winnerId,
@@ -158,16 +158,6 @@ class Chessmasterbo
 						:lastMove 		=> Time.now.to_s,
 						:playOrder		=> orderx
 					)
-				
-				hist = ChessboardHistory.new
-
-				hist.gameId 		= game.gameId
-				hist.order 			= orderx
-				hist.piece 			= game.piece
-				hist.origin 		= game.origin
-				hist.final 			= game.final
-				hist.lastModified 	= Time.now.to_s
-				hist.save
 
 				# Update piece with final position
 				piece1.update_attributes(
@@ -175,6 +165,17 @@ class Chessmasterbo
 						:final			=> final,	
 						:lastModified	=> Time.now.to_s
 					)
+
+				hist = ChessboardHistory.new
+				hist.gameId 		= gameId
+				hist.order 			= orderx
+				hist.piece 			= piece
+				hist.origin 		= origin
+				hist.final 			= final
+				hist.lastModified 	= Time.now.to_s
+				hist.save
+
+				
 				# Find all chessboard
 				olist = Chessboard.where(:gameId => gameId).all(:order => :item.asc)
 

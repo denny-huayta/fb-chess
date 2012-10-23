@@ -146,6 +146,7 @@ class Chessmasterbo
 					currentPlayerId	= game.player1Id
 				end
 				
+				order = game.playOrder + 1
 				# Update game status and winner 				
 				game.update_attributes(						
 						:winner 		=> winner,
@@ -153,14 +154,25 @@ class Chessmasterbo
 						:status 		=> statusGame,
 						:currentPlayer 	=> currentPlayer,
 						:currentPlayerId => currentPlayerId,
-						:lastMove 		=> Time.now.to_s
+						:lastMove 		=> Time.now,
+						:playOrder		=> order
 					)
 				
+				history = ChessboardHistory.new
+
+				history.gameId 		= game.gameId
+				history.order 		= order
+				history.piece 		= game.piece
+				history.origin 		= game.origin
+				history.final 		= game.final
+				history.lastModified = Time.now
+				history.save
+
 				# Update piece with final position
 				piece1.update_attributes(
 						:origin			=> origin,
 						:final			=> final,	
-						:lastModified	=> Time.now.to_s
+						:lastModified	=> Time.now
 					)
 				# Find all chessboard
 				olist = Chessboard.where(:gameId => gameId).all(:order => :item.asc)
@@ -179,14 +191,14 @@ class Chessmasterbo
 	end
 
 	def savepiece(gameId, piece, initial, final, status, userInfo)
-		chessboard = Chessboard.new
-		chessboard.gameId		= gameId
-		chessboard.playerId		= userInfo['id']
-		chessboard.piece		= piece
-		chessboard.origin		= initial
-		chessboard.final		= final
-		chessboard.status		= status # It should be 1 or 0
-		chessboard.save
+		piece1 = Chessboard.new
+		piece1.gameId		= gameId
+		piece1.playerId		= userInfo['id']
+		piece1.piece		= piece
+		piece1.origin		= initial
+		piece1.final		= final
+		piece1.status		= status # It should be 1 or 0
+		piece1.save
 	end
 
 	def challenge(gameId, userInfo)

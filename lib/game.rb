@@ -25,9 +25,9 @@ class Game
 	key :winnerId,			String
 	key :status,			String
 	key :creationDate,		String
-	key :lastMove,			String
+	key :lastMove,			Date
 	key :chessBoards,		String
-
+	key :playOrder,			Integer
 	# validations
 	# validates_presence_of :gameId, :player1
 

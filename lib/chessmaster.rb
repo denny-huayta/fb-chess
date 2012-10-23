@@ -182,7 +182,7 @@ class CHESSMASTER < Sinatra::Application
 	end
 
 	get '/getposition' do
-		chessboard = ChessboardHistory.where(:gameId => params[:gameId], :order => params[:order]).first
+		chessboard = ChessboardHistory.where(:gameId => params[:gameId] , :order => params[:order].to_i).first
 		return chessboard.to_json
 	end
 

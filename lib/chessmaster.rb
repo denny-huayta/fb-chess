@@ -149,7 +149,7 @@ class CHESSMASTER < Sinatra::Application
 			
 			erb :chessboard
 		else
-			redirect '/login?ReturnUrl=%2fsee?gameId=' + gameId + '%2f'
+			redirect '/login'
 		end
 
 	end

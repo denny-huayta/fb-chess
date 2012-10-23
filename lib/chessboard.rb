@@ -14,7 +14,7 @@ class Chessboard
 	key :origin,			String
 	key :final,				String
 	key :status,			String
-	key :lastModified,		Date
+	key :lastModified,		String
 	# validations
 	# validates_presence_of :gameId, :player1
 

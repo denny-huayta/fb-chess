@@ -25,7 +25,7 @@ class Game
 	key :winnerId,			String
 	key :status,			String
 	key :creationDate,		String
-	key :lastMove,			Date
+	key :lastMove,			String
 	key :chessBoards,		String
 	key :playOrder,			Integer
 	# validations

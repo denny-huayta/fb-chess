@@ -41,7 +41,8 @@ class Chessmasterbo
 		game.player1Email		= userInfo['email']
 		game.creationDate		= Time.now.to_s
 		game.status				= 'New'
-		game.url     			= SITE_URL + 'see?gameId=' +  game.gameId		
+		game.url     			= SITE_URL + 'see?gameId=' +  game.gameId	
+		game.playOrder			= 0	
 		game.save
 
 		return game
@@ -146,7 +147,7 @@ class Chessmasterbo
 					currentPlayerId	= game.player1Id
 				end
 				
-				order = game.playOrder + 1
+				orderx = game.playOrder + 1
 				# Update game status and winner 				
 				game.update_attributes(						
 						:winner 		=> winner,
@@ -154,25 +155,25 @@ class Chessmasterbo
 						:status 		=> statusGame,
 						:currentPlayer 	=> currentPlayer,
 						:currentPlayerId => currentPlayerId,
-						:lastMove 		=> Time.now,
-						:playOrder		=> order
+						:lastMove 		=> Time.now.to_s,
+						:playOrder		=> orderx
 					)
 				
 				history = ChessboardHistory.new
 
 				history.gameId 		= game.gameId
-				history.order 		= order
+				history.order 		= orderx
 				history.piece 		= game.piece
 				history.origin 		= game.origin
 				history.final 		= game.final
-				history.lastModified = Time.now
+				history.lastModified = Time.now.to_s
 				history.save
 
 				# Update piece with final position
 				piece1.update_attributes(
 						:origin			=> origin,
 						:final			=> final,	
-						:lastModified	=> Time.now
+						:lastModified	=> Time.now.to_s
 					)
 				# Find all chessboard
 				olist = Chessboard.where(:gameId => gameId).all(:order => :item.asc)

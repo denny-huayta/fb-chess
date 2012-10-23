@@ -181,9 +181,14 @@ class CHESSMASTER < Sinatra::Application
 		return chessmasterbo.writelisttojson(chessboard)
 	end
 
+	get '/getposition' do
+		chessboard = ChessboardHistory.where(:gameId => params[:gameId], :order => params[:order]).first
+		return chessboard.to_json
+	end
+
 	get '/getchessstatus' do		
-		@game = Game.where(:gameId => params[:gameId]).first			
-		return @game.to_json
+		game = Game.where(:gameId => params[:gameId]).first			
+		return game.to_json
 	end
 
 	get '/deleteallgames' do

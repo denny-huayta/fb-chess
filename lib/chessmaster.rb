@@ -142,10 +142,14 @@ class CHESSMASTER < Sinatra::Application
 			@game 		= Game.where(:gameId => gameId).first
 			@userInfo 	= ChessUser.where(:userId => session['userInfo']['id']).first
 			
-			if @userInfo['userId'] == @game.player1Id
-				@challenger = ChessUser.where(:userId => @game.player2Id).first
+			@player1 	= ChessUser.where(:userId => @game.player1Id).first
+			@player2 	= ChessUser.where(:userId => @game.player2Id).first
+
+			if @player1['userId'] == @game.player1Id
+				@challenger = @player2
+
 			else
-				@challenger = ChessUser.where(:userId => @game.player1Id).first
+				@challenger = @player1
 			end
 			
 			erb :chessboard

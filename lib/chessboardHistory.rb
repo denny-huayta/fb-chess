@@ -1,3 +1,9 @@
+require 'rubygems'
+require 'sinatra'
+require 'koala'
+require 'mongo'
+require 'mongo_mapper'
+require 'uuid'
 
 class ChessboardHistory
 	include MongoMapper::Document

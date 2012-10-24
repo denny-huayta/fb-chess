@@ -39,7 +39,7 @@
             <img src="<%= @player2.urlPicture %>" class="PlayerBox2_img" />            
           </div>
         </div>
-        <% @url =  @game.url.gsub('see','view' ) %>
+        <% @url =  @game.url.gsub('see','' ) %>
         <div class="fb-comments" data-href="<%= @url %>" data-num-posts="5" data-width="300">
         </div>
       <div id="IsDebug" style="Display:none">

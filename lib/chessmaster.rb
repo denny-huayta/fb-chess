@@ -201,8 +201,13 @@ class CHESSMASTER < Sinatra::Application
 		Game.destroy_all
 		Chessboard.destroy_all
 		ChessUser.destroy_all
+		ChessboardHistory.destroy_all
 		redirect '/games'
 
+	end
+
+	get '/view' do
+		erb :view
 	end
 
 end
